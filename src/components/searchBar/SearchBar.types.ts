@@ -3,4 +3,5 @@ export type SearchBarProps = {
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSearch: () => void;
   onClearSearch: () => void;
+  onErrorMessage?: string;
 };

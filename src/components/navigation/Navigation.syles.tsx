@@ -5,10 +5,14 @@ import theme from "../../theme";
 export const StyledNavigationContainer = styled("nav")({
   backgroundColor: theme.palette.common.white,
   width: "100%",
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  position: "sticky",
+  top: 0,
+  zIndex: 100,
 });
 
 export const StyledNavigationContent = styled("nav")({
-  padding: theme.spacing(2),
+  padding: theme.spacing(0, 2),
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",

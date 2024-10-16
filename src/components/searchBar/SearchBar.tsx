@@ -1,24 +1,20 @@
-import React from "react";
-import {
-  TextField,
-  InputAdornment,
-  IconButton,
-  Button,
-  Box,
-} from "@mui/material";
+import { InputAdornment, IconButton } from "@mui/material";
 import { Search, Clear } from "@mui/icons-material";
 import { SearchBarProps } from "./SearchBar.types";
+import { SearchBarContainer, SearchBarButton, SearchBarInput, SearchErrorMessage } from "./SearchBar.styles";
 
 const SearchBar = ({
   searchTerm,
   onSearchChange,
   onSearch,
   onClearSearch,
+  onErrorMessage,
 }: SearchBarProps) => {
   return (
-    <Box display="flex" gap={2} mb={4}>
-      <TextField
-        label="Search clients"
+    <>
+     <SearchBarContainer>
+      <SearchBarInput
+        label="Search by name"
         variant="outlined"
         value={searchTerm}
         onChange={onSearchChange}
@@ -33,10 +29,18 @@ const SearchBar = ({
           ),
         }}
       />
-      <Button variant="contained" color="primary" onClick={onSearch} startIcon={<Search />}>
+      <SearchBarButton
+        variant="contained"
+        color="primary"
+        onClick={onSearch}
+        startIcon={<Search />}
+      >
         Search
-      </Button>
-    </Box>
+      </SearchBarButton>
+    </SearchBarContainer>
+    <SearchErrorMessage>{onErrorMessage  ?? ''}</SearchErrorMessage>
+    </>
+   
   );
 };
 

@@ -13,12 +13,15 @@ const Navigation = () => {
     <StyledNavigationContainer data-testid="navigation-container">
       <StyledNavigationContent>
         <StyedLogoContainer>
-          <StyledLink to="/">Client Matters </StyledLink>
+          <StyledLink to="/">Client Matters</StyledLink>
         </StyedLogoContainer>
 
         <StyledUnorderedList>
-          <StyledListItem>
+        <StyledListItem>
             <StyledLink to="/">Home</StyledLink>
+          </StyledListItem>
+          <StyledListItem>
+            <StyledLink to="/clients">Clients</StyledLink>
           </StyledListItem>
         </StyledUnorderedList>
       </StyledNavigationContent>
