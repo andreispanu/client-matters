@@ -6,6 +6,7 @@ import Navigation from './navigation';
 import PageLayout from './layout';
 import HomePage from './pages/HomePage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ClientDetails from './pages/ClientDetails';
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function App() {
         <PageLayout>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/client/:clientId" element={<ClientDetails />} />
           </Routes>
         </PageLayout>
       </Router>

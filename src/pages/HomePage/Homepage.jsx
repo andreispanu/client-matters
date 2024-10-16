@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box, Table, TableBody, TableCell, TableHead, TableRow, CircularProgress, Alert, TablePagination, TableSortLabel, InputAdornment, IconButton } from '@mui/material';
-import { Search, Clear } from '@mui/icons-material'; // Import Search and Clear icons
+import { Search, Clear } from '@mui/icons-material'; 
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import axios from 'axios';
 import { format } from 'date-fns';
 
@@ -28,6 +29,7 @@ const HomePage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10); // Track rows per page
   const [sortBy, setSortBy] = useState('NAME'); // Sort by NAME by default
   const [sortOrder, setSortOrder] = useState('asc'); // Sort order, default to ascending
+  const navigate = useNavigate(); // Initialize useNavigate hook for navigation
 
   // Fetch data using the query
   const { data, error, isLoading, refetch } = useQuery({
@@ -75,6 +77,11 @@ const HomePage = () => {
     setSortOrder(isAsc ? 'desc' : 'asc');
     setSortBy('NAME');
     refetch();
+  };
+
+  // Handle row click to navigate to the client details page
+  const handleRowClick = (clientId) => {
+    navigate(`/client/${clientId}`);
   };
 
   return (
@@ -149,7 +156,7 @@ const HomePage = () => {
             </TableHead>
             <TableBody>
               {data.results.map((client) => (
-                <TableRow key={client.clientId}>
+                <TableRow key={client.clientId} onClick={() => handleRowClick(client.clientId)} style={{ cursor: 'pointer' }}>
                   <TableCell>{client.name}</TableCell>
                   <TableCell>{format(new Date(client.inception), 'MM/dd/yyyy')}</TableCell>
                   <TableCell>{client.matterCount}</TableCell>
