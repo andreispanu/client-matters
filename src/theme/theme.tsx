@@ -6,11 +6,12 @@ const theme = createTheme({
       main: '#003F5C',
     },
     secondary: {
-      main: '#F1C232',
+      main: '#0c8',
     },
     error: {
       main: '#E74C3C',
     },
+
     background: {
       default: '#F5F5F5',
     },

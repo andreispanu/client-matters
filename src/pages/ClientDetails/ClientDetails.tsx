@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Container, Typography, CircularProgress, Alert, Box, Table, TableBody, TableCell, TableHead, TableRow, Button } from '@mui/material';
-import ReusableDialog from '../../components/ReusableDialog'; // Import the reusable dialog
+import ReusableDialog from '../../components/reusableDialog'; // Import the reusable dialog
 import { ClientData, Matter } from './ClientDetails.types';
 
 // Fetch client data by clientId
