@@ -18,4 +18,5 @@ export type Person = {
     matterName: string;
     matterDate: string;
     matterDescription?: string;
+    matterCode: string;
   };

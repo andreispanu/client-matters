@@ -2,6 +2,7 @@ export type Matter = {
   matterId: string;
   matterName: string;
   matterDate: string;
+  matterCode: string;
 };
 
 export type MattersTableProps = {

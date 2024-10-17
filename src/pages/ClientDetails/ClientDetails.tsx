@@ -11,6 +11,7 @@ import {
   StyledClientDetailsContainer,
   StyledClientDetailsCopy,
 } from "./ClientDetails.styles";
+import {formatCustomDate} from "../../utils";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -143,7 +144,7 @@ const ClientDetails = () => {
 
       <MattersTable
         mattersLoading={mattersLoading}
-        mattersData={mattersData || { results: [], totalResults: 0 }}
+        mattersData={mattersData || { results: [  ], totalResults: 0 }}
         page={page}
         rowsPerPage={rowsPerPage}
         totalResults={mattersData?.totalResults || 0}
@@ -165,7 +166,7 @@ const ClientDetails = () => {
               </Typography>
               <Typography>
                 <strong>Date:</strong>{" "}
-                {new Date(selectedMatter.matterDate).toLocaleDateString()}
+                {formatCustomDate(selectedMatter.matterDate)}
               </Typography>
               {selectedMatter.matterDescription && (
                 <Typography>
