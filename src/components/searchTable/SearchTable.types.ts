@@ -14,7 +14,6 @@ export type ReusableTableProps = {
   onSortByName: () => void;
   onSortByDate: () => void;
   page: number;
-  rowsPerPage: number;
   totalResults: number;
   onPageChange: (event: unknown, newPage: number) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;

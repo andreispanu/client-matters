@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Snackbar, Alert, Typography } from "@mui/material";
+import { Container, Snackbar, Alert } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -49,7 +49,6 @@ const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // For input value
   const [fetchedTerm, setFetchedTerm] = useState(""); // For triggering search on button click
   const [page, setPage] = useState(0); // Track current page
-  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page, default 10
   const [sortBy, setSortBy] = useState("NAME"); // Default sort by NAME
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
@@ -65,9 +64,8 @@ const SearchPage = () => {
     isLoading: clientsLoading,
     refetch: refetchClients,
   } = useQuery({
-    queryKey: ["clients", fetchedTerm, page, rowsPerPage, sortBy, sortOrder],
-    queryFn: () =>
-      fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
+    queryKey: ["clients", fetchedTerm, page, 10, sortBy, sortOrder],
+    queryFn: () => fetchClients(fetchedTerm, page, 10, sortBy, sortOrder),
     enabled: false, // Disable automatic fetch
     refetchOnWindowFocus: false,
   });
@@ -77,7 +75,7 @@ const SearchPage = () => {
     if (fetchedTerm) {
       refetchClients();
     }
-  }, [fetchedTerm, page, rowsPerPage, sortBy, sortOrder, refetchClients]);
+  }, [fetchedTerm, page, sortBy, sortOrder, refetchClients]);
 
   // Fetch client details when clientsData is available
   useEffect(() => {
@@ -133,7 +131,6 @@ const SearchPage = () => {
 
   // Handle rows per page change
   const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10)); // Update rows per page
     setPage(0); // Reset to first page when rows per page change
   };
 
@@ -180,23 +177,13 @@ const SearchPage = () => {
   const totalResults = clientsData?.totalResults || 0;
 
   // Calculate the range of currently displayed results
-  const displayedFrom = page * rowsPerPage + 1;
-  const displayedTo = Math.min((page + 1) * rowsPerPage, totalResults);
+  const displayedFrom = page * 10 + 1;
+  const displayedTo = Math.min((page + 1) * 10, totalResults);
 
   return (
     <Container>
       <>
-        <div>
-          <MainHeading>Search Clients</MainHeading>
-          <MainSearchTextCopy>
-            Here, you'll find a comprehensive list of clients displayed in a
-            well-organized table format. The table allows you to easily sort the
-            client entries either by name or by the date they were added,
-            offering flexibility in how you view the data. To begin searching,
-            simply enter the name of the client you're looking for in the search
-            bar.
-          </MainSearchTextCopy>
-        </div>
+        <MainHeading>Search Clients</MainHeading>
 
         <SearchBar
           searchTerm={searchTerm}
@@ -204,6 +191,17 @@ const SearchPage = () => {
           onSearch={handleSearch}
           onClearSearch={handleClearSearch}
         />
+
+        {searchTerm === "" && !isSearchTriggered && (
+          <MainSearchTextCopy sx={{marginTop: '30px'}}>
+            Here, you'll find a comprehensive list of clients displayed in a
+            well-organized table format. The table allows you to easily sort the
+            client entries either by name or by the date they were added,
+            offering flexibility in how you view the data. To begin searching,
+            simply enter the name of the client you're looking for in the search
+            bar and press Search.
+          </MainSearchTextCopy>
+        )}
 
         {combinedResults &&
           combinedResults.length !== 0 &&
@@ -215,7 +213,6 @@ const SearchPage = () => {
               onSortByName={handleSortByName}
               onSortByDate={handleSortByDate}
               page={page}
-              rowsPerPage={rowsPerPage}
               totalResults={totalResults}
               displayedFrom={displayedFrom}
               displayedTo={displayedTo}

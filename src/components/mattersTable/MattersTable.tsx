@@ -10,6 +10,7 @@ import {
   TableContainer,
   Pagination,
   Box,
+  Typography,
 } from "@mui/material";
 import { MattersTableProps } from "./MattersTable.types";
 import { formatCustomDate } from "../../utils";
@@ -24,11 +25,18 @@ const MattersTable = ({
   onOpenDialog,
 }: MattersTableProps) => {
   const totalPages = Math.ceil(totalResults / rowsPerPage);
-
-  console.log(mattersData);
+  const displayedFrom = page * 10 + 1;
+  const displayedTo = Math.min((page + 1) * 10, totalResults);
 
   return (
     <>
+      <Typography
+        variant="body2"
+        component="div"
+        sx={{ p: 2, width: "100%", textAlign: "right" }}
+      >
+        Displaying {displayedFrom} - {displayedTo} of {totalResults} results
+      </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -55,11 +63,9 @@ const MattersTable = ({
                     onClick={() => onOpenDialog(matter)}
                   >
                     <TableCell>{matter.matterCode}</TableCell>
-                    <TableCell>
-                    {matter.matterName}
-                    </TableCell>
+                    <TableCell>{matter.matterName}</TableCell>
                     <TableCell align="right">
-                    {formatCustomDate(matter.matterDate)}
+                      {formatCustomDate(matter.matterDate)}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -11,7 +11,6 @@ import {
   Typography,
   Pagination,
 } from "@mui/material";
-import { format } from "date-fns";
 import { ReusableTableProps } from "./SearchTable.types";
 import { formatCustomDate } from "../../utils";
 
@@ -22,7 +21,6 @@ const SearchTable = ({
   onSortByName,
   onSortByDate,
   page,
-  rowsPerPage,
   totalResults,
   onPageChange,
   onRowClick,
@@ -30,9 +28,7 @@ const SearchTable = ({
   displayedFrom,
   displayedTo,
 }: ReusableTableProps) => {
-  const totalPages = Math.ceil(totalResults / rowsPerPage);
-
-  console.log("data", data);
+  const totalPages = Math.ceil(totalResults / 10);
 
   return (
     <>
@@ -41,7 +37,7 @@ const SearchTable = ({
         component="div"
         sx={{ p: 2, width: "100%", textAlign: "right" }}
       >
-        Displaying {displayedFrom}–{displayedTo} of {totalResults} results
+        Displaying {displayedFrom} - {displayedTo} of {totalResults} results
       </Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -74,7 +70,7 @@ const SearchTable = ({
           </TableHead>
           <TableBody>
             {isLoading
-              ? Array.from({ length: rowsPerPage }).map((_, index) => (
+              ? Array.from({ length: 10 }).map((_, index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Skeleton variant="text" />

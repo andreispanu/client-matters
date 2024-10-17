@@ -14,7 +14,7 @@ const SearchBar = ({
   // Handle keydown event to detect "Enter" key
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      onSearch(); // Trigger the search if "Enter" is pressed
+      onSearch();
     }
   };
 
