@@ -6,6 +6,11 @@ export type Matter = {
 
 export type MattersTableProps = {
   mattersLoading: boolean;
-  mattersData: { results: Matter[] } | undefined;
+  mattersData: { results: Matter[] };
+  page: number;
+  rowsPerPage: number;
+  totalResults: number;
+  onPageChange: (event: unknown, newPage: number) => void;
+  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onOpenDialog: (matter: Matter) => void;
 };

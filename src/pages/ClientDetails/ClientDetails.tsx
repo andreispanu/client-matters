@@ -22,12 +22,19 @@ const fetchClientData = async (clientId: string): Promise<ClientData> => {
   return data;
 };
 
-// Fetch matters associated with the client
+// Fetch matters associated with the client with pagination
 const fetchClientMatters = async (
-  clientId: string
-): Promise<{ results: Matter[] }> => {
+  clientId: string,
+  page: number,
+  rowsPerPage: number,
+  sortBy: string = "DATE",
+  sortOrder: string = "ASCENDING"
+): Promise<{ results: Matter[]; totalResults: number }> => {
+  const index = page * rowsPerPage; // Calculate index for API
+  const offset = rowsPerPage; // Number of rows per page
+
   const { data } = await axios.get(
-    `/clientdata/mattersearch/${clientId}/DATE/ASCENDING/0/10`,
+    `/clientdata/mattersearch/${clientId}/${sortBy}/${sortOrder}/${index}/${offset}`,
     {
       headers: {
         Authorization: process.env.REACT_APP_API_KEY,
@@ -42,6 +49,10 @@ const ClientDetails = () => {
   const [selectedMatter, setSelectedMatter] = useState<Matter | null>(null); // Track the selected matter
   const [open, setOpen] = useState(false); // Track dialog open state
 
+  // Pagination state
+  const [page, setPage] = useState(0); // Current page, 0-based index
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page
+
   // Fetch client data
   const {
     data: clientData,
@@ -53,16 +64,29 @@ const ClientDetails = () => {
     enabled: !!clientId,
   });
 
-  // Fetch matters data
+  // Fetch matters data with pagination
   const {
     data: mattersData,
     isLoading: mattersLoading,
     error: mattersError,
   } = useQuery({
-    queryKey: ["matters", clientId],
-    queryFn: () => fetchClientMatters(clientId!),
+    queryKey: ["matters", clientId, page, rowsPerPage],
+    queryFn: () => fetchClientMatters(clientId!, page, rowsPerPage),
     enabled: !!clientId,
   });
+
+  // Handle page change
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleRowsPerPageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to first page when rows per page changes
+  };
 
   // Handle dialog open and close
   const handleOpenDialog = (matter: Matter) => {
@@ -72,7 +96,7 @@ const ClientDetails = () => {
 
   const handleCloseDialog = () => {
     setOpen(false);
-    setSelectedMatter(null); // Reset selected matter
+    setSelectedMatter(null);
   };
 
   if (clientError || mattersError)
@@ -86,7 +110,6 @@ const ClientDetails = () => {
         </StyledClientDetailsPageHeading>
       </StyledClientDetailsContainer>
 
-      {/* Client Information */}
       {clientLoading ? (
         <>
           <Skeleton variant="text" width="50%" height={40} />
@@ -120,7 +143,12 @@ const ClientDetails = () => {
 
       <MattersTable
         mattersLoading={mattersLoading}
-        mattersData={mattersData}
+        mattersData={mattersData || { results: [], totalResults: 0 }}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        totalResults={mattersData?.totalResults || 0}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleRowsPerPageChange}
         onOpenDialog={handleOpenDialog}
       />
 

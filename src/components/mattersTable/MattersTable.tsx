@@ -5,62 +5,71 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Button,
-  Box,
   Skeleton,
   Paper,
   TableContainer,
+  Pagination,
+  Box,
 } from "@mui/material";
 import { MattersTableProps } from "./MattersTable.types";
+
 
 const MattersTable = ({
   mattersLoading,
   mattersData,
+  page,
+  rowsPerPage,
+  totalResults,
+  onPageChange,
   onOpenDialog,
 }: MattersTableProps) => {
+  
+  const totalPages = Math.ceil(totalResults / rowsPerPage);
+
   return (
-    <div>
-      {mattersLoading ? (
-        <Box>
-          {Array.from(new Array(3)).map((_, index) => (
-            <Box key={index} mb={2}>
-              <Skeleton variant="rectangular" height={40} />
-            </Box>
-          ))}
-        </Box>
-      ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Matter Name</TableCell>
-                <TableCell>Matter Date</TableCell>
-                <TableCell align="right">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {mattersData &&
-                mattersData.results.map((matter) => (
-                  <TableRow key={matter.matterId}>
+    <>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Matter Name</TableCell>
+              <TableCell>Date</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {mattersLoading
+              ? Array.from({ length: rowsPerPage }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell colSpan={2}>
+                      <Skeleton variant="text" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              : mattersData.results.map((matter) => (
+                  <TableRow
+                    key={matter.matterId}
+                    hover
+                    onClick={() => onOpenDialog(matter)}
+                  >
                     <TableCell>{matter.matterName}</TableCell>
                     <TableCell>
                       {new Date(matter.matterDate).toLocaleDateString()}
                     </TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="outlined"
-                        onClick={() => onOpenDialog(matter)}
-                      >
-                        View Details
-                      </Button>
-                    </TableCell>
                   </TableRow>
                 ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+   
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Pagination
+          count={totalPages} 
+          page={page + 1} 
+          onChange={(event, value) => onPageChange(event, value - 1)} 
+          color="primary"
+        />
+      </Box>
+    </>
   );
 };
 
