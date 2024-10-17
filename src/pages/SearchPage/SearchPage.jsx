@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SearchTable from "../../components/searchTable";
 import SearchBar from "../../components/searchBar/SearchBar";
-import { MainHeading, MainSearchTextCopy } from "./Searchpage.styles";  
+import { MainHeading, MainSearchTextCopy } from "./SearchPage.styles";
 
 // Function to fetch clients from the API with sorting and pagination
 const fetchClients = async (searchTerm, page, rowsPerPage, sortBy, sortOrder) => {
@@ -30,30 +30,31 @@ const fetchClients = async (searchTerm, page, rowsPerPage, sortBy, sortOrder) =>
 };
 
 const SearchPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // For input value
+  const [fetchedTerm, setFetchedTerm] = useState(""); // For triggering search on button click
   const [page, setPage] = useState(0); // Track current page
-  const [rowsPerPage, setRowsPerPage] = useState(50); // Rows per page
+  const rowsPerPage = 10; // Rows per page
   const [sortBy, setSortBy] = useState("NAME"); // Default sort by NAME
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
+  const [isSearchTriggered, setIsSearchTriggered] = useState(false); // Track if search button was clicked
   const navigate = useNavigate(); // For navigation
 
-  // Fetch data using react-query
+  // Fetch data using react-query, but disable auto-fetching
   const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["clients", searchTerm, page, rowsPerPage, sortBy, sortOrder],
-    queryFn: () => fetchClients(searchTerm, page, rowsPerPage, sortBy, sortOrder),
-    enabled: !!searchTerm, // Only run query when there is a search term
+    queryKey: ["clients", fetchedTerm, page, rowsPerPage, sortBy, sortOrder],
+    queryFn: () => fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
+    enabled: false, // Disable automatic fetch
     refetchOnWindowFocus: false,
   });
 
+  // Trigger refetch after fetchedTerm is updated
   useEffect(() => {
-    if (data && rowsPerPage >= data.totalResults) {
-      setRowsPerPage(data.totalResults); // Limit rowsPerPage to totalResults
+    if (fetchedTerm) {
+      refetch();
     }
-  }, [data, rowsPerPage]);
-
-  console.log('rowsPerPage', rowsPerPage)
+  }, [fetchedTerm, refetch]);
 
   // Handle search button click
   const handleSearch = () => {
@@ -62,27 +63,23 @@ const SearchPage = () => {
       setSnackbarMessage("Please enter a search term.");
       setSnackbarOpen(true); // Show the Snackbar
     } else {
-      refetch();
+      setFetchedTerm(searchTerm); // Update the term used for fetching
+      setIsSearchTriggered(true); // Mark that the search button was clicked
+      // refetch() will be triggered by the useEffect when fetchedTerm is updated
     }
   };
 
   // Handle clearing the search term
   const handleClearSearch = () => {
     setSearchTerm(""); // Clear search input
-    setPage(0); // Reset to the first page
-    refetch(); // Trigger refetch to reset search results
+    setIsSearchTriggered(false); // Reset search triggered flag
+    // Do not refetch when clearing input; wait for an explicit search action
   };
 
   // Handle page change
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
-
-  // Handle rows per page change
-  const handleChangeRowsPerPage = (event) => {
-    const selectedRowsPerPage = parseInt(event.target.value, 10);
-    setRowsPerPage(selectedRowsPerPage > data?.totalResults ? data.totalResults : selectedRowsPerPage); // Limit rows per page if necessary
-    setPage(0); // Reset to the first page when changing rows per page
+    if (isSearchTriggered) refetch(); // Trigger refetch only if the search button was clicked
   };
 
   // Handle sorting by Date
@@ -90,7 +87,7 @@ const SearchPage = () => {
     const isAsc = sortBy === "DATE" && sortOrder === "asc";
     setSortOrder(isAsc ? "desc" : "asc");
     setSortBy("DATE");
-    refetch();
+    if (isSearchTriggered) refetch(); // Trigger refetch only if the search button was clicked
   };
 
   // Handle sorting by Name
@@ -98,7 +95,7 @@ const SearchPage = () => {
     const isAsc = sortBy === "NAME" && sortOrder === "asc";
     setSortOrder(isAsc ? "desc" : "asc");
     setSortBy("NAME");
-    refetch();
+    if (isSearchTriggered) refetch(); // Trigger refetch only if the search button was clicked
   };
 
   // Handle row click to navigate to client details page
@@ -132,13 +129,13 @@ const SearchPage = () => {
 
         <SearchBar
           searchTerm={searchTerm}
-          onSearchChange={(e) => setSearchTerm(e.target.value)}
+          onSearchChange={(e) => setSearchTerm(e.target.value)} // Update input value
           onSearch={handleSearch}
           onClearSearch={handleClearSearch}
           onErrorMessage={data?.searchError || ""}
         />
 
-        {data && data.results.length !== 0 && searchTerm && (
+        {data && data.results.length !== 0 && isSearchTriggered && (
           <SearchTable
             data={data.results}
             sortBy={sortBy}
@@ -149,7 +146,6 @@ const SearchPage = () => {
             rowsPerPage={rowsPerPage}
             totalResults={totalResults}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
             onRowClick={handleRowClick}
             isLoading={isLoading}
           />
