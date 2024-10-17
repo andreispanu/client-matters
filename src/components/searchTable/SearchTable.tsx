@@ -26,14 +26,16 @@ const SearchTable = ({
   onPageChange,
   onRowClick,
   isLoading,
+  displayedFrom,
+  displayedTo,
 }: ReusableTableProps) => {
   // Calculate total number of pages
   const totalPages = Math.ceil(totalResults / rowsPerPage);
 
   return (
     <>
-      <Typography variant="body2" component="div" sx={{ p: 2 }}>
-        {totalResults} results
+      <Typography variant="body2" component="div" sx={{ p: 2, width: '100%', textAlign:'right'}}>
+        Displaying {displayedFrom}–{displayedTo} of {totalResults} results
       </Typography>
       <TableContainer component={Paper}>
         <Table>

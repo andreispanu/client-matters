@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Container, Snackbar } from "@mui/material";
+import { Container, Snackbar, Alert, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,13 +8,7 @@ import SearchBar from "../../components/searchBar/SearchBar";
 import { MainHeading, MainSearchTextCopy } from "./SearchPage.styles";
 
 // Function to fetch clients from the API with sorting and pagination
-const fetchClients = async (
-  searchTerm,
-  page,
-  rowsPerPage,
-  sortBy,
-  sortOrder
-) => {
+const fetchClients = async (searchTerm, page, rowsPerPage, sortBy, sortOrder) => {
   const filter = searchTerm;
   const index = page * rowsPerPage; // Calculate index for API
   const offset = rowsPerPage; // Number of rows per page
@@ -48,10 +42,14 @@ const SearchPage = () => {
   const navigate = useNavigate(); // For navigation
 
   // Fetch data using react-query, but disable auto-fetching
-  const { data, error, isLoading, refetch } = useQuery({
+  const {
+    data,
+    error, // Capture the error returned by react-query
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["clients", fetchedTerm, page, rowsPerPage, sortBy, sortOrder],
-    queryFn: () =>
-      fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
+    queryFn: () => fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
     enabled: false, // Disable automatic fetch
     refetchOnWindowFocus: false,
   });
@@ -67,7 +65,7 @@ const SearchPage = () => {
   const handleSearch = () => {
     setPage(0); // Reset to the first page when searching
     if (searchTerm === "") {
-      setSnackbarMessage("Please enter a search term.");
+      setSnackbarMessage("Please enter a search term."); // Set snackbar message
       setSnackbarOpen(true); // Show the Snackbar
     } else {
       setFetchedTerm(searchTerm); // Update the term used for fetching
@@ -117,8 +115,25 @@ const SearchPage = () => {
     setSnackbarOpen(false);
   };
 
+  // Trigger snackbar when there's an error from react-query or no results from data
+  useEffect(() => {
+    if (error) {
+      // Filter out "Index and Offset are out of range." error
+      setSnackbarMessage(error.message); // Set the snackbar message to the error message
+      setSnackbarOpen(true); // Open the snackbar
+    } else if (data?.searchError && data.searchError !== "Index and Offset out of range.") {
+      // If there is a searchError coming from the data, display it in the snackbar
+      setSnackbarMessage(data.searchError); // Show custom search error
+      setSnackbarOpen(true); // Open the snackbar
+    }
+  }, [error, data?.searchError]);
+
   // Get the total number of results from the API data
   const totalResults = data?.totalResults || 0;
+
+  // Calculate the range of currently displayed results
+  const displayedFrom = page * rowsPerPage + 1;
+  const displayedTo = Math.min((page + 1) * rowsPerPage, totalResults);
 
   return (
     <Container>
@@ -140,11 +155,6 @@ const SearchPage = () => {
           onSearchChange={(e) => setSearchTerm(e.target.value)}
           onSearch={handleSearch}
           onClearSearch={handleClearSearch}
-          onErrorMessage={
-            data?.searchError !== "Index and Offset out of range."
-              ? data?.searchError
-              : ""
-          }
         />
 
         {data && data.results.length !== 0 && isSearchTriggered && (
@@ -157,6 +167,8 @@ const SearchPage = () => {
             page={page}
             rowsPerPage={rowsPerPage}
             totalResults={totalResults}
+            displayedFrom={displayedFrom}
+            displayedTo={displayedTo}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleRowsPerPageChange}
             onRowClick={handleRowClick}
@@ -164,14 +176,15 @@ const SearchPage = () => {
           />
         )}
 
-        {error && <Alert severity="error">{error.message}</Alert>}
-
         <Snackbar
           open={snackbarOpen}
-          autoHideDuration={2000}
+          autoHideDuration={3000}
           onClose={handleSnackbarClose}
-          message={snackbarMessage}
-        />
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          sx={{ borderRadius: "30px" }}
+        >
+          <Alert severity="error">{snackbarMessage}</Alert>
+        </Snackbar>
       </>
     </Container>
   );
