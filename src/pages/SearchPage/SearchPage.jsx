@@ -33,7 +33,7 @@ const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // For input value
   const [fetchedTerm, setFetchedTerm] = useState(""); // For triggering search on button click
   const [page, setPage] = useState(0); // Track current page
-  const rowsPerPage = 10; // Rows per page
+  const [rowsPerPage, setRowsPerPage] = useState(10); // Rows per page, default 10
   const [sortBy, setSortBy] = useState("NAME"); // Default sort by NAME
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
@@ -49,12 +49,12 @@ const SearchPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Trigger refetch after fetchedTerm is updated
+  // Trigger refetch after fetchedTerm, sortBy, sortOrder, page, or rowsPerPage are updated
   useEffect(() => {
     if (fetchedTerm) {
       refetch();
     }
-  }, [fetchedTerm, refetch]);
+  }, [fetchedTerm, page, rowsPerPage, sortBy, sortOrder, refetch]);
 
   // Handle search button click
   const handleSearch = () => {
@@ -65,7 +65,6 @@ const SearchPage = () => {
     } else {
       setFetchedTerm(searchTerm); // Update the term used for fetching
       setIsSearchTriggered(true); // Mark that the search button was clicked
-      // refetch() will be triggered by the useEffect when fetchedTerm is updated
     }
   };
 
@@ -73,13 +72,17 @@ const SearchPage = () => {
   const handleClearSearch = () => {
     setSearchTerm(""); // Clear search input
     setIsSearchTriggered(false); // Reset search triggered flag
-    // Do not refetch when clearing input; wait for an explicit search action
   };
 
-  // Handle page change
+  // Handle page change from pagination (converted to 0-based for API)
   const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    if (isSearchTriggered) refetch(); // Trigger refetch only if the search button was clicked
+    setPage(newPage); // Page is already 0-based in MUI Pagination
+  };
+
+  // Handle rows per page change
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10)); // Update rows per page
+    setPage(0); // Reset to first page when rows per page change
   };
 
   // Handle sorting by Date
@@ -87,7 +90,6 @@ const SearchPage = () => {
     const isAsc = sortBy === "DATE" && sortOrder === "asc";
     setSortOrder(isAsc ? "desc" : "asc");
     setSortBy("DATE");
-    if (isSearchTriggered) refetch(); // Trigger refetch only if the search button was clicked
   };
 
   // Handle sorting by Name
@@ -95,7 +97,6 @@ const SearchPage = () => {
     const isAsc = sortBy === "NAME" && sortOrder === "asc";
     setSortOrder(isAsc ? "desc" : "asc");
     setSortBy("NAME");
-    if (isSearchTriggered) refetch(); // Trigger refetch only if the search button was clicked
   };
 
   // Handle row click to navigate to client details page
@@ -146,6 +147,7 @@ const SearchPage = () => {
             rowsPerPage={rowsPerPage}
             totalResults={totalResults}
             onPageChange={handleChangePage}
+            onRowsPerPageChange={handleRowsPerPageChange}
             onRowClick={handleRowClick}
             isLoading={isLoading}
           />

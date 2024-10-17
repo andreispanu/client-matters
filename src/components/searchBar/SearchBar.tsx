@@ -10,37 +10,45 @@ const SearchBar = ({
   onClearSearch,
   onErrorMessage,
 }: SearchBarProps) => {
+  
+  // Handle keydown event to detect "Enter" key
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      onSearch(); // Trigger the search if "Enter" is pressed
+    }
+  };
+
   return (
     <>
-     <SearchBarContainer>
-      <SearchBarInput
-        label="Search by name"
-        variant="outlined"
-        value={searchTerm}
-        onChange={onSearchChange}
-        fullWidth
-        InputProps={{
-          endAdornment: searchTerm && (
-            <InputAdornment position="end">
-              <IconButton onClick={onClearSearch}>
-                <Clear />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <SearchBarButton
-        variant="contained"
-        color="primary"
-        onClick={onSearch}
-        startIcon={<Search />}
-      >
-        Search
-      </SearchBarButton>
-    </SearchBarContainer>
-    <SearchErrorMessage>{onErrorMessage  ?? ''}</SearchErrorMessage>
+      <SearchBarContainer>
+        <SearchBarInput
+          label="Search by name"
+          variant="outlined"
+          value={searchTerm}
+          onChange={onSearchChange}
+          onKeyDown={handleKeyDown} // Add keydown event listener here
+          fullWidth
+          InputProps={{
+            endAdornment: searchTerm && (
+              <InputAdornment position="end">
+                <IconButton onClick={onClearSearch}>
+                  <Clear />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <SearchBarButton
+          variant="contained"
+          color="primary"
+          onClick={onSearch}
+          startIcon={<Search />}
+        >
+          Search
+        </SearchBarButton>
+      </SearchBarContainer>
+      <SearchErrorMessage>{onErrorMessage ?? ''}</SearchErrorMessage>
     </>
-   
   );
 };
 
