@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ReusableDialogProps } from "./ReusableDialog.types";
 
-const ReusableDialog = ({
+export const ReusableDialog = ({
   open,
   onClose,
   title,
@@ -31,5 +31,3 @@ const ReusableDialog = ({
     </Dialog>
   );
 };
-
-export default ReusableDialog;

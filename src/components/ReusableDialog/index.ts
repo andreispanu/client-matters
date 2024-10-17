@@ -1,2 +1,3 @@
-import ReusableDialog from "./ReusableDialog";
+import { ReusableDialog } from "./ReusableDialog";
+
 export default ReusableDialog;
