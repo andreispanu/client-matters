@@ -8,7 +8,13 @@ import SearchBar from "../../components/searchBar/SearchBar";
 import { MainHeading, MainSearchTextCopy } from "./SearchPage.styles";
 
 // Function to fetch clients from the API with sorting and pagination
-const fetchClients = async (searchTerm, page, rowsPerPage, sortBy, sortOrder) => {
+const fetchClients = async (
+  searchTerm,
+  page,
+  rowsPerPage,
+  sortBy,
+  sortOrder
+) => {
   const filter = searchTerm;
   const index = page * rowsPerPage; // Calculate index for API
   const offset = rowsPerPage; // Number of rows per page
@@ -44,7 +50,8 @@ const SearchPage = () => {
   // Fetch data using react-query, but disable auto-fetching
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["clients", fetchedTerm, page, rowsPerPage, sortBy, sortOrder],
-    queryFn: () => fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
+    queryFn: () =>
+      fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
     enabled: false, // Disable automatic fetch
     refetchOnWindowFocus: false,
   });
@@ -130,10 +137,14 @@ const SearchPage = () => {
 
         <SearchBar
           searchTerm={searchTerm}
-          onSearchChange={(e) => setSearchTerm(e.target.value)} // Update input value
+          onSearchChange={(e) => setSearchTerm(e.target.value)}
           onSearch={handleSearch}
           onClearSearch={handleClearSearch}
-          onErrorMessage={data?.searchError || ""}
+          onErrorMessage={
+            data?.searchError !== "Index and Offset out of range."
+              ? data?.searchError
+              : ""
+          }
         />
 
         {data && data.results.length !== 0 && isSearchTriggered && (

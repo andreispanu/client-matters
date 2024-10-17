@@ -9,7 +9,7 @@ import {
   Paper,
   TableContainer,
   Typography,
-  Pagination, // Import MUI Pagination
+  Pagination,
 } from "@mui/material";
 import { format } from "date-fns";
 import { ReusableTableProps } from "./SearchTable.types";
@@ -27,7 +27,6 @@ const SearchTable = ({
   onRowClick,
   isLoading,
 }: ReusableTableProps) => {
-
   // Calculate total number of pages
   const totalPages = Math.ceil(totalResults / rowsPerPage);
 
