@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Container, Typography, Alert, Box, Skeleton } from "@mui/material";
-import ReusableDialog from "../../components/reusableDialog";
+import MatersDialog from "../../components/mattersDialog";
 import { ClientData, Matter } from "./ClientDetails.types";
 import MattersTable from "../../components/mattersTable";
 import {
@@ -154,7 +154,7 @@ const ClientDetails = () => {
       />
 
       {/* Dialog for matter details */}
-      <ReusableDialog
+      <MatersDialog
         open={open}
         onClose={handleCloseDialog}
         title="Matter Details"

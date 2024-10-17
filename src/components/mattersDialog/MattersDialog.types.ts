@@ -1,4 +1,4 @@
-export type ReusableDialogProps = {
+export type MatersDialogProps = {
   open: boolean;
   onClose: () => void;
   title?: string;

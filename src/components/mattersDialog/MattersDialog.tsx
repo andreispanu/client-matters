@@ -6,15 +6,15 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
-import { ReusableDialogProps } from "./ReusableDialog.types";
+import { MatersDialogProps } from "./MattersDialog.types";
 
-export const ReusableDialog = ({
+export const MatersDialog = ({
   open,
   onClose,
   title,
   content,
   actions,
-}: ReusableDialogProps) => {
+}: MatersDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       {title && <DialogTitle>{title}</DialogTitle>}
