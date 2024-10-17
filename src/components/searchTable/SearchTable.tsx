@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { ReusableTableProps } from "./SearchTable.types";
+import { formatCustomDate } from "../../utils";
 
 const SearchTable = ({
   data,
@@ -29,12 +30,17 @@ const SearchTable = ({
   displayedFrom,
   displayedTo,
 }: ReusableTableProps) => {
-  // Calculate total number of pages
   const totalPages = Math.ceil(totalResults / rowsPerPage);
+
+  console.log("data", data);
 
   return (
     <>
-      <Typography variant="body2" component="div" sx={{ p: 2, width: '100%', textAlign:'right'}}>
+      <Typography
+        variant="body2"
+        component="div"
+        sx={{ p: 2, width: "100%", textAlign: "right" }}
+      >
         Displaying {displayedFrom}–{displayedTo} of {totalResults} results
       </Typography>
       <TableContainer component={Paper}>
@@ -50,8 +56,12 @@ const SearchTable = ({
                   Client Name
                 </TableSortLabel>
               </TableCell>
-
-              <TableCell sortDirection={sortBy === "DATE" ? sortOrder : false}>
+              <TableCell>Client Description</TableCell>
+              <TableCell>Client Code</TableCell>
+              <TableCell
+                sortDirection={sortBy === "DATE" ? sortOrder : false}
+                align="right"
+              >
                 <TableSortLabel
                   active={sortBy === "DATE"}
                   direction={sortOrder}
@@ -60,14 +70,15 @@ const SearchTable = ({
                   Inception Date
                 </TableSortLabel>
               </TableCell>
-
-              <TableCell align="right">Matter Count</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {isLoading
               ? Array.from({ length: rowsPerPage }).map((_, index) => (
                   <TableRow key={index}>
+                    <TableCell>
+                      <Skeleton variant="text" />
+                    </TableCell>
                     <TableCell>
                       <Skeleton variant="text" />
                     </TableCell>
@@ -87,10 +98,11 @@ const SearchTable = ({
                     style={{ cursor: "pointer" }}
                   >
                     <TableCell>{client.name}</TableCell>
-                    <TableCell>
-                      {format(new Date(client.inception), "dd/MM/yyyy")}
+                    <TableCell>{client.description}</TableCell>
+                    <TableCell>{client.code}</TableCell>
+                    <TableCell align="right">
+                      {formatCustomDate(client.inception)}
                     </TableCell>
-                    <TableCell align="right">{client.matterCount}</TableCell>
                   </TableRow>
                 ))}
           </TableBody>

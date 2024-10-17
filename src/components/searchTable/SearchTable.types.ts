@@ -3,6 +3,8 @@ export type Client = {
   name: string;
   inception: string;
   matterCount: number;
+  description: string;
+  code: string;
 };
 
 export type ReusableTableProps = {

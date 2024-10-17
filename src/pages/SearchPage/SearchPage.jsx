@@ -8,7 +8,13 @@ import SearchBar from "../../components/searchBar/SearchBar";
 import { MainHeading, MainSearchTextCopy } from "./SearchPage.styles";
 
 // Function to fetch clients from the API with sorting and pagination
-const fetchClients = async (searchTerm, page, rowsPerPage, sortBy, sortOrder) => {
+const fetchClients = async (
+  searchTerm,
+  page,
+  rowsPerPage,
+  sortBy,
+  sortOrder
+) => {
   const filter = searchTerm;
   const index = page * rowsPerPage; // Calculate index for API
   const offset = rowsPerPage; // Number of rows per page
@@ -29,6 +35,16 @@ const fetchClients = async (searchTerm, page, rowsPerPage, sortBy, sortOrder) =>
   }
 };
 
+// Function to fetch client details by clientId
+const fetchClientDetails = async (clientId) => {
+  const { data } = await axios.get(`/ClientData/client/${clientId}`, {
+    headers: {
+      Authorization: process.env.REACT_APP_API_KEY,
+    },
+  });
+  return data;
+};
+
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState(""); // For input value
   const [fetchedTerm, setFetchedTerm] = useState(""); // For triggering search on button click
@@ -39,17 +55,19 @@ const SearchPage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar visibility
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Snackbar message
   const [isSearchTriggered, setIsSearchTriggered] = useState(false); // Track if search button was clicked
+  const [clientDetails, setClientDetails] = useState({}); // Store client details for each clientId
   const navigate = useNavigate(); // For navigation
 
-  // Fetch data using react-query, but disable auto-fetching
+  // Fetch clients data using react-query, but disable auto-fetching
   const {
-    data,
-    error, // Capture the error returned by react-query
-    isLoading,
-    refetch,
+    data: clientsData,
+    error: clientsError,
+    isLoading: clientsLoading,
+    refetch: refetchClients,
   } = useQuery({
     queryKey: ["clients", fetchedTerm, page, rowsPerPage, sortBy, sortOrder],
-    queryFn: () => fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
+    queryFn: () =>
+      fetchClients(fetchedTerm, page, rowsPerPage, sortBy, sortOrder),
     enabled: false, // Disable automatic fetch
     refetchOnWindowFocus: false,
   });
@@ -57,9 +75,38 @@ const SearchPage = () => {
   // Trigger refetch after fetchedTerm, sortBy, sortOrder, page, or rowsPerPage are updated
   useEffect(() => {
     if (fetchedTerm) {
-      refetch();
+      refetchClients();
     }
-  }, [fetchedTerm, page, rowsPerPage, sortBy, sortOrder, refetch]);
+  }, [fetchedTerm, page, rowsPerPage, sortBy, sortOrder, refetchClients]);
+
+  // Fetch client details when clientsData is available
+  useEffect(() => {
+    if (clientsData?.results?.length > 0) {
+      const fetchDetails = async () => {
+        const detailsMap = {};
+        for (const client of clientsData.results) {
+          const clientDetailsResponse = await fetchClientDetails(
+            client.clientId
+          );
+          detailsMap[client.clientId] = clientDetailsResponse;
+        }
+        setClientDetails(detailsMap);
+      };
+      fetchDetails();
+    }
+  }, [clientsData]);
+
+  // Combine client details into search results
+  const combinedResults =
+    clientsData?.results?.map((client) => {
+      const clientDetail = clientDetails[client.clientId];
+      return {
+        ...client,
+        name: clientDetail?.name || client.name,
+        description: clientDetail?.description || "No description available",
+        code: clientDetail?.code || "No code available",
+      };
+    }) || [];
 
   // Handle search button click
   const handleSearch = () => {
@@ -117,19 +164,20 @@ const SearchPage = () => {
 
   // Trigger snackbar when there's an error from react-query or no results from data
   useEffect(() => {
-    if (error) {
-      // Filter out "Index and Offset are out of range." error
-      setSnackbarMessage(error.message); // Set the snackbar message to the error message
+    if (clientsError) {
+      setSnackbarMessage(clientsError.message); // Set the snackbar message to the error message
       setSnackbarOpen(true); // Open the snackbar
-    } else if (data?.searchError && data.searchError !== "Index and Offset out of range.") {
-      // If there is a searchError coming from the data, display it in the snackbar
-      setSnackbarMessage(data.searchError); // Show custom search error
+    } else if (
+      clientsData?.searchError &&
+      clientsData.searchError !== "Index and Offset out of range."
+    ) {
+      setSnackbarMessage(clientsData.searchError); // Show custom search error
       setSnackbarOpen(true); // Open the snackbar
     }
-  }, [error, data?.searchError]);
+  }, [clientsError, clientsData?.searchError]);
 
   // Get the total number of results from the API data
-  const totalResults = data?.totalResults || 0;
+  const totalResults = clientsData?.totalResults || 0;
 
   // Calculate the range of currently displayed results
   const displayedFrom = page * rowsPerPage + 1;
@@ -157,24 +205,26 @@ const SearchPage = () => {
           onClearSearch={handleClearSearch}
         />
 
-        {data && data.results.length !== 0 && isSearchTriggered && (
-          <SearchTable
-            data={data.results}
-            sortBy={sortBy}
-            sortOrder={sortOrder}
-            onSortByName={handleSortByName}
-            onSortByDate={handleSortByDate}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            totalResults={totalResults}
-            displayedFrom={displayedFrom}
-            displayedTo={displayedTo}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleRowsPerPageChange}
-            onRowClick={handleRowClick}
-            isLoading={isLoading}
-          />
-        )}
+        {combinedResults &&
+          combinedResults.length !== 0 &&
+          isSearchTriggered && (
+            <SearchTable
+              data={combinedResults} // Use combined client and matter data
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortByName={handleSortByName}
+              onSortByDate={handleSortByDate}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              totalResults={totalResults}
+              displayedFrom={displayedFrom}
+              displayedTo={displayedTo}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              onRowClick={handleRowClick}
+              isLoading={clientsLoading}
+            />
+          )}
 
         <Snackbar
           open={snackbarOpen}
