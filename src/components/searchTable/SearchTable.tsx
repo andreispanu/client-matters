@@ -81,6 +81,7 @@ const SearchTable = ({
                   <TableRow
                     key={client.clientId}
                     onClick={() => onRowClick(client.clientId)}
+                    hover
                     style={{ cursor: "pointer" }}
                   >
                     <TableCell>{client.name}</TableCell>

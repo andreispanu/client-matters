@@ -50,6 +50,7 @@ const MattersTable = ({
                     key={matter.matterId}
                     hover
                     onClick={() => onOpenDialog(matter)}
+                    style={{ cursor: "pointer" }}
                   >
                     <TableCell>{matter.matterName}</TableCell>
                     <TableCell>
