@@ -8,11 +8,11 @@ import {
   Skeleton,
   Paper,
   TableContainer,
-  Typography,
   Pagination,
 } from "@mui/material";
 import { ReusableTableProps } from "./SearchTable.types";
 import { formatCustomDate } from "../../utils";
+import { TableTitleContainer, TableTitle } from "./SearchTable.styles";
 
 const SearchTable = ({
   data,
@@ -32,13 +32,12 @@ const SearchTable = ({
 
   return (
     <>
-      <Typography
-        variant="body2"
-        component="div"
-        sx={{ p: 2, width: "100%", textAlign: "right" }}
-      >
-        Displaying {displayedFrom} - {displayedTo} of {totalResults} results
-      </Typography>
+      <TableTitleContainer>
+        <TableTitle>Search results</TableTitle>
+        <TableTitle>
+          Displaying {displayedFrom} - {displayedTo} of {totalResults} results
+        </TableTitle>
+      </TableTitleContainer>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -111,7 +110,7 @@ const SearchTable = ({
         page={page + 1} // Pagination uses 1-based index, adjust for 0-based page state
         onChange={(event, value) => onPageChange(event, value - 1)} // Adjust back to 0-based index
         color="primary"
-        sx={{ mt: 2, display: "flex", justifyContent: "center" }} // Add spacing and centering
+        sx={{ mt: 2, display: "flex", justifyContent: "center", pb: 4 }} // Add spacing and centering
       />
     </>
   );

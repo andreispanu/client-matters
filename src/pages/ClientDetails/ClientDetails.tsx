@@ -11,7 +11,7 @@ import {
   StyledClientDetailsContainer,
   StyledClientDetailsCopy,
 } from "./ClientDetails.styles";
-import {formatCustomDate} from "../../utils";
+import { formatCustomDate } from "../../utils";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -104,54 +104,58 @@ const ClientDetails = () => {
     return <Alert severity="error">Error fetching data</Alert>;
 
   return (
-    <Container>
-      <StyledClientDetailsContainer>
-        <StyledClientDetailsPageHeading>
-          Client Details
-        </StyledClientDetailsPageHeading>
-      </StyledClientDetailsContainer>
+    <>
+      <Container>
+        <StyledClientDetailsContainer>
+          <StyledClientDetailsPageHeading>
+            Client Details
+          </StyledClientDetailsPageHeading>
+        </StyledClientDetailsContainer>
 
-      {clientLoading ? (
-        <>
-          <Skeleton variant="text" width="50%" height={40} />
-          <Skeleton variant="text" width="80%" height={30} />
-        </>
-      ) : (
-        clientData && (
+        {clientLoading ? (
           <>
-            <StyledClientDetailsCopy>{clientData.name}</StyledClientDetailsCopy>
-            <Typography>{clientData.description}</Typography>
-
-            {/* People Associated with the Client */}
-            <Box my={4}>
-              <Typography variant="h6">People</Typography>
-              {clientData.people.map((person) => (
-                <Typography key={person.email}>
-                  {person.title} {person.firstName} {person.lastName} -{" "}
-                  {person.email} ({person.phone})
-                </Typography>
-              ))}
-            </Box>
+            <Skeleton variant="text" width="50%" height={40} />
+            <Skeleton variant="text" width="80%" height={30} />
           </>
-        )
-      )}
+        ) : (
+          clientData && (
+            <>
+              <StyledClientDetailsCopy>
+                {clientData.name}
+              </StyledClientDetailsCopy>
+              <Typography>{clientData.description}</Typography>
 
-      <StyledClientDetailsContainer>
-        <StyledClientDetailsPageHeading>
-          Client Matters
-        </StyledClientDetailsPageHeading>
-      </StyledClientDetailsContainer>
+              {/* People Associated with the Client */}
+              <Box my={4}>
+                <Typography variant="h6">People</Typography>
+                {clientData.people.map((person) => (
+                  <Typography key={person.email}>
+                    {person.title} {person.firstName} {person.lastName} -{" "}
+                    {person.email} ({person.phone})
+                  </Typography>
+                ))}
+              </Box>
+            </>
+          )
+        )}
 
-      <MattersTable
-        mattersLoading={mattersLoading}
-        mattersData={mattersData || { results: [  ], totalResults: 0 }}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        totalResults={mattersData?.totalResults || 0}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleRowsPerPageChange}
-        onOpenDialog={handleOpenDialog}
-      />
+        <StyledClientDetailsContainer>
+          <StyledClientDetailsPageHeading>
+            Client Matters
+          </StyledClientDetailsPageHeading>
+        </StyledClientDetailsContainer>
+
+        <MattersTable
+          mattersLoading={mattersLoading}
+          mattersData={mattersData || { results: [], totalResults: 0 }}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          totalResults={mattersData?.totalResults || 0}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          onOpenDialog={handleOpenDialog}
+        />
+      </Container>
 
       {/* Dialog for matter details */}
       <MatersDialog
@@ -178,7 +182,7 @@ const ClientDetails = () => {
           )
         }
       />
-    </Container>
+    </>
   );
 };
 

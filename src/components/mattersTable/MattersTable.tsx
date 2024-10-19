@@ -10,10 +10,10 @@ import {
   TableContainer,
   Pagination,
   Box,
-  Typography,
 } from "@mui/material";
 import { MattersTableProps } from "./MattersTable.types";
 import { formatCustomDate } from "../../utils";
+import { TableTitleContainer, TableTitle } from "./MattersTable.styles";
 
 const MattersTable = ({
   mattersLoading,
@@ -30,13 +30,12 @@ const MattersTable = ({
 
   return (
     <>
-      <Typography
-        variant="body2"
-        component="div"
-        sx={{ p: 2, width: "100%", textAlign: "right" }}
-      >
-        Displaying {displayedFrom} - {displayedTo} of {totalResults} results
-      </Typography>
+      <TableTitleContainer>
+        <TableTitle>Matters</TableTitle>
+        <TableTitle>
+          Displaying {displayedFrom} - {displayedTo} of {totalResults} results
+        </TableTitle>
+      </TableTitleContainer>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -73,7 +72,7 @@ const MattersTable = ({
         </Table>
       </TableContainer>
 
-      <Box display="flex" justifyContent="center" mt={2}>
+      <Box display="flex" justifyContent="center" mt={2} pb={3}>
         <Pagination
           count={totalPages}
           page={page + 1}

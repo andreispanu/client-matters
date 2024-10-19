@@ -12,26 +12,12 @@ export const StyledNavigationContainer = styled("nav")({
 });
 
 export const StyledNavigationContent = styled("nav")({
-  padding: theme.spacing(0, 2),
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "flex-start",
   alignItems: "center",
   maxWidth: theme.breakpoints.values.lg,
   margin: "auto",
-});
-
-export const StyledUnorderedList = styled("ul")({
-  listStyle: "none",
-  display: "flex",
-  gap: "20px",
-  margin: 0,
-  padding: 0,
-});
-
-export const StyledListItem = styled("li")({
-  fontSize: "18px",
-  color: theme.palette.text.primary,
-  fontWeight: theme.typography.fontWeightMedium,
+  padding: theme.spacing(0, 3),
 });
 
 export const StyledLink = styled(Link)({
@@ -45,6 +31,7 @@ export const StyledLink = styled(Link)({
 export const StyedLogoContainer = styled("div")({
   fontSize: "24px",
   padding: "10px",
+  paddingLeft: 0,
   textAlign: "left",
   height: "50px",
   width: "300px",

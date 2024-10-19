@@ -5,7 +5,7 @@ import { StyledPageLayout } from "./PageLayout.styles";
 export const PageLayout = ({ children }:PageLayoutProps) => {
     return (
         <StyledPageLayout>
-        {children}
+            {children}
         </StyledPageLayout>
     );
 }

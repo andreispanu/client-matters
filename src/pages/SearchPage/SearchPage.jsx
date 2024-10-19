@@ -5,7 +5,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import SearchTable from "../../components/searchTable";
 import SearchBar from "../../components/searchBar/SearchBar";
-import { MainHeading, MainSearchTextCopy } from "./SearchPage.styles";
+import {
+  MainHeading,
+  MainSearchTextCopy,
+  SearchContainer,
+  SearchContent,
+} from "./SearchPage.styles";
+import Grid from "@mui/material/Grid2";
 
 // Function to fetch clients from the API with sorting and pagination
 const fetchClients = async (
@@ -182,57 +188,56 @@ const SearchPage = () => {
 
   return (
     <Container>
-      <>
-        <MainHeading>Search Clients</MainHeading>
+      <SearchContainer>
+        <SearchContent>
+          <Grid container spacing={4}>
+            <Grid size={5}>
+              <Grid container spacing={2}>
+                <MainHeading>Search Clients</MainHeading>
+                <MainSearchTextCopy>
+                  To begin searching, simply enter the name of the client you are
+                  looking for in the search bar and press Search.
+                </MainSearchTextCopy>
+              </Grid>
+            </Grid>
+            <Grid size={7}>
+              <SearchBar
+                searchTerm={searchTerm}
+                onSearchChange={(e) => setSearchTerm(e.target.value)}
+                onSearch={handleSearch}
+                onClearSearch={handleClearSearch}
+              />
+            </Grid>
+          </Grid>
+        </SearchContent>
+      </SearchContainer>
 
-        <SearchBar
-          searchTerm={searchTerm}
-          onSearchChange={(e) => setSearchTerm(e.target.value)}
-          onSearch={handleSearch}
-          onClearSearch={handleClearSearch}
+      {combinedResults && combinedResults.length !== 0 && isSearchTriggered && (
+        <SearchTable
+          data={combinedResults} // Use combined client and matter data
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortByName={handleSortByName}
+          onSortByDate={handleSortByDate}
+          page={page}
+          totalResults={totalResults}
+          displayedFrom={displayedFrom}
+          displayedTo={displayedTo}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleRowsPerPageChange}
+          onRowClick={handleRowClick}
+          isLoading={clientsLoading}
         />
-
-        {searchTerm === "" && !isSearchTriggered && (
-          <MainSearchTextCopy sx={{marginTop: '30px'}}>
-            Here, you'll find a comprehensive list of clients displayed in a
-            well-organized table format. The table allows you to easily sort the
-            client entries either by name or by the date they were added,
-            offering flexibility in how you view the data. To begin searching,
-            simply enter the name of the client you're looking for in the search
-            bar and press Search.
-          </MainSearchTextCopy>
-        )}
-
-        {combinedResults &&
-          combinedResults.length !== 0 &&
-          isSearchTriggered && (
-            <SearchTable
-              data={combinedResults} // Use combined client and matter data
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              onSortByName={handleSortByName}
-              onSortByDate={handleSortByDate}
-              page={page}
-              totalResults={totalResults}
-              displayedFrom={displayedFrom}
-              displayedTo={displayedTo}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              onRowClick={handleRowClick}
-              isLoading={clientsLoading}
-            />
-          )}
-
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={handleSnackbarClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          sx={{ borderRadius: "30px" }}
-        >
-          <Alert severity="error">{snackbarMessage}</Alert>
-        </Snackbar>
-      </>
+      )}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        sx={{ borderRadius: "30px" }}
+      >
+        <Alert severity="error">{snackbarMessage}</Alert>
+      </Snackbar>
     </Container>
   );
 };

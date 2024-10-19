@@ -6,8 +6,9 @@ export const SearchBarContainer = styled("div")(() => ({
   display: "flex",
   gap: theme.spacing(2),
   marginBottom: theme.spacing(2),
-  maxWidth: '750px',
+  maxWidth: '90%',
   margin: 'auto',
+  marginRight: 0,
   marginTop: theme.spacing(6),
 }));
 

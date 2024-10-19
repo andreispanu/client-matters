@@ -7,7 +7,6 @@ import PageLayout from "./layout";
 import SearchPage from "./pages/SearchPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ClientDetails from "./pages/ClientDetails";
-import HomePage from "./pages/HomePage"; 
 
 const queryClient = new QueryClient();
 
@@ -17,11 +16,11 @@ function App() {
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <Router>
-          <Navigation />
           <PageLayout>
+            <Navigation />
+
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/clients" element={<SearchPage />} />
+              <Route path="/" element={<SearchPage />} />
               <Route path="/client/:clientId" element={<ClientDetails />} />
             </Routes>
           </PageLayout>

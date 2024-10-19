@@ -2,7 +2,8 @@ import { createTheme } from "@mui/material/styles";
 
 export const customColors = {
   darkblue: "#0f1c44",
-  brightGreen: "#0c8"
+  brightGreen: "#0c8",
+  lightBlue: "#eef3f8",
 };
 
 const theme = createTheme({
