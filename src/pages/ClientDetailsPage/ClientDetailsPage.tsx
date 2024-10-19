@@ -4,18 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {
   Container,
-  Typography,
   Alert,
   Box,
   Skeleton,
-  Tabs,
-  Tab,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import MatersDialog from "../../components/mattersDialog";
-import { ClientData, Matter } from "./ClientDetailsPage.types";
+import { ClientData, Matter, MattersData } from "./ClientDetailsPage.types";
 import MattersTable from "../../components/mattersTable";
-import { formatCustomDate } from "../../utils";
 import ClientAdress from "../../components/clientAdress";
 import ClientDetails from "../../components/clientDetails";
 import ClientContacts from "../../components/clientContacts";
@@ -53,9 +49,18 @@ const fetchClientMatters = async (
   return data;
 };
 
+const fetchMatterDetails = async (matterId: string): Promise<MattersData> => {
+  const { data } = await axios.get(`/clientdata/matter/${matterId}`, {
+    headers: {
+      Authorization: process.env.REACT_APP_API_KEY,
+    },
+  });
+  return data;
+}
+
 const ClientDetailsPage = () => {
   const { clientId } = useParams<{ clientId: string }>(); // Ensure clientId is a string from the URL parameters
-  const [selectedMatter, setSelectedMatter] = useState<Matter | null>(null);
+  const [selectedMatter, setSelectedMatter] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -83,6 +88,17 @@ const ClientDetailsPage = () => {
     enabled: !!clientId,
   });
 
+  // Fetch matter details
+  const {
+    data: matterDetails,
+    isLoading: matterDetailsLoading,
+    error: matterDetailsError,
+  } = useQuery({
+    queryKey: ["matterDetails", selectedMatter],
+    queryFn: () => fetchMatterDetails(selectedMatter),
+    enabled: !!selectedMatter,
+  });
+
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -94,19 +110,21 @@ const ClientDetailsPage = () => {
     setPage(0);
   };
 
-  const handleOpenDialog = (matter: Matter) => {
-    setSelectedMatter(matter);
+  const handleOpenDialog = (matterId: string) => {
+    setSelectedMatter(matterId);
     setOpen(true);
   };
 
   const handleCloseDialog = () => {
     setOpen(false);
-    setSelectedMatter(null);
+    setSelectedMatter('');
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   };
+
+  console.log("MattersData", mattersData);
 
   if (clientError || mattersError)
     return <Alert severity="error">Error fetching data</Alert>;
@@ -185,7 +203,7 @@ const ClientDetailsPage = () => {
                   totalResults={mattersData?.totalResults || 0}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleRowsPerPageChange}
-                  onOpenDialog={handleOpenDialog}
+                  onOpenDialog={(matterId)=>handleOpenDialog(matterId)}
                 />
               </Box>
             )}
@@ -198,25 +216,16 @@ const ClientDetailsPage = () => {
         open={open}
         onClose={handleCloseDialog}
         title="Matter Details"
-        content={
-          selectedMatter && (
-            <>
-              <Typography>
-                <strong>Name:</strong> {selectedMatter.matterName}
-              </Typography>
-              <Typography>
-                <strong>Date:</strong>{" "}
-                {formatCustomDate(selectedMatter.matterDate)}
-              </Typography>
-              {selectedMatter.matterDescription && (
-                <Typography>
-                  <strong>Description:</strong>{" "}
-                  {selectedMatter.matterDescription}
-                </Typography>
-              )}
-            </>
-          )
-        }
+        content={matterDetails ?? {
+          clientId: "",
+          matterId: selectedMatter,
+          matterCode: "",
+          matterName: "",
+          matterDescription: "",
+          matterDate: "",
+        }}
+        contentLoading={matterDetailsLoading}
+        contentError={matterDetailsError ? matterDetailsError.message : undefined}
       />
     </>
   );

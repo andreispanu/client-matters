@@ -28,6 +28,8 @@ const MattersTable = ({
   const displayedFrom = page * 10 + 1;
   const displayedTo = Math.min((page + 1) * 10, totalResults);
 
+  console.log("mattersData", mattersData);
+
   return (
     <>
       <TableTitleContainer>
@@ -59,7 +61,7 @@ const MattersTable = ({
                     key={matter.matterId}
                     hover
                     style={{ cursor: "pointer" }}
-                    onClick={() => onOpenDialog(matter)}
+                    onClick={() => onOpenDialog(matter.matterId)}
                   >
                     <TableCell>{matter.matterCode}</TableCell>
                     <TableCell>{matter.matterName}</TableCell>

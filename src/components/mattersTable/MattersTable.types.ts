@@ -13,5 +13,5 @@ export type MattersTableProps = {
   totalResults: number;
   onPageChange: (event: unknown, newPage: number) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onOpenDialog: (matter: Matter) => void;
+  onOpenDialog: (matterId: string) => void;
 };

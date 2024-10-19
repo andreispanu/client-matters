@@ -21,7 +21,7 @@ const SearchBar = ({
     <>
       <SearchBarContainer>
         <SearchBarInput
-          label="Search by name"
+          label="Search clients by name"
           variant="outlined"
           value={searchTerm}
           onChange={onSearchChange}

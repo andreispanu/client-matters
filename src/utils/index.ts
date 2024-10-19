@@ -1,3 +1,3 @@
-import { formatCustomDate } from "./dateFormatter";
+import { formatCustomDate, formatCustomDateTime } from "./dateFormatter";
 
-export { formatCustomDate };
+export { formatCustomDate, formatCustomDateTime };

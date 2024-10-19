@@ -29,3 +29,12 @@ export type Matter = {
   matterDescription?: string;
   matterCode: string;
 };
+
+export type MattersData = {
+  clientId: string;
+  matterId: string;
+  matterCode: string;
+  matterName: string;
+  matterDescription: string;
+  matterDate: string;
+}
