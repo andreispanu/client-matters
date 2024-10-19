@@ -13,7 +13,7 @@ export const StyledNavigationContainer = styled("nav")({
 
 export const StyledNavigationContent = styled("nav")({
   display: "flex",
-  justifyContent: "flex-start",
+  justifyContent: "space-between",
   alignItems: "center",
   maxWidth: theme.breakpoints.values.lg,
   margin: "auto",
@@ -34,7 +34,6 @@ export const StyedLogoContainer = styled("div")({
   paddingLeft: 0,
   textAlign: "left",
   height: "50px",
-  width: "300px",
   color: theme.palette.text.primary,
   fontWeight: theme.typography.fontWeightMedium,
   "&:hover a": {
