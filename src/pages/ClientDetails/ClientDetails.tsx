@@ -12,6 +12,7 @@ import {
   StyledClientDetailsCopy,
 } from "./ClientDetails.styles";
 import { formatCustomDate } from "../../utils";
+import ClientAdress from "../../components/clientAdress";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -100,6 +101,8 @@ const ClientDetails = () => {
     setSelectedMatter(null);
   };
 
+  console.log(clientData);
+
   if (clientError || mattersError)
     return <Alert severity="error">Error fetching data</Alert>;
 
@@ -124,6 +127,9 @@ const ClientDetails = () => {
                 {clientData.name}
               </StyledClientDetailsCopy>
               <Typography>{clientData.description}</Typography>
+
+              {/* Client Address */}
+              <ClientAdress addressDetails={clientData.address} />
 
               {/* People Associated with the Client */}
               <Box my={4}>

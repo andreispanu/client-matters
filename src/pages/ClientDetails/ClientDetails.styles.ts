@@ -31,3 +31,4 @@ export const StyledClientDetailsButton = styled(Button)(() => ({
   color: customColors.darkblue,
   borderRadius: "3px",
 }));
+
