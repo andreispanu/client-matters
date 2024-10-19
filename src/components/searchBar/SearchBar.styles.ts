@@ -5,11 +5,10 @@ import theme from "../../theme";
 export const SearchBarContainer = styled("div")(() => ({
   display: "flex",
   gap: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  maxWidth: '90%',
   margin: 'auto',
-  marginRight: 0,
+  marginBottom: theme.spacing(2),
   marginTop: theme.spacing(6),
+  maxWidth: '60%',
 }));
 
 export const SearchBarInput = styled(TextField)(() => ({

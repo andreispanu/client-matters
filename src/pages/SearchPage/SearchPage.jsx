@@ -191,16 +191,7 @@ const SearchPage = () => {
       <SearchContainer>
         <SearchContent>
           <Grid container spacing={4}>
-            <Grid size={5}>
-              <Grid container spacing={2}>
-                <MainHeading>Search Clients</MainHeading>
-                <MainSearchTextCopy>
-                  To begin searching, simply enter the name of the client you are
-                  looking for in the search bar and press Search.
-                </MainSearchTextCopy>
-              </Grid>
-            </Grid>
-            <Grid size={7}>
+            <Grid size={12}>
               <SearchBar
                 searchTerm={searchTerm}
                 onSearchChange={(e) => setSearchTerm(e.target.value)}

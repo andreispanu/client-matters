@@ -11,7 +11,6 @@ const SearchBar = ({
   onErrorMessage,
 }: SearchBarProps) => {
   
-  // Handle keydown event to detect "Enter" key
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       onSearch();
@@ -26,7 +25,7 @@ const SearchBar = ({
           variant="outlined"
           value={searchTerm}
           onChange={onSearchChange}
-          onKeyDown={handleKeyDown} // Add keydown event listener here
+          onKeyDown={handleKeyDown}
           fullWidth
           InputProps={{
             endAdornment: searchTerm && (
