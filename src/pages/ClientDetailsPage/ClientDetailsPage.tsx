@@ -13,6 +13,7 @@ import {
 import { formatCustomDate } from "../../utils";
 import ClientAdress from "../../components/clientAdress";
 import ClientDetails from "../../components/clientDetails";
+import ClientContacts from "../../components/clientContacts";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -123,30 +124,13 @@ const ClientDetailsPage = () => {
         ) : (
           clientData && (
             <>
-              {/* <StyledClientDetailsCopy>
-                {clientData.name}
-              </StyledClientDetailsCopy> */}
-              
-              {/* Client Description */}
               <ClientDetails
                 clientName={clientData.name}
                 clientDescription={clientData.description}
                 clientInceptionDate={clientData.inceptionDate}
               />
-
-              {/* Client Address */}
               <ClientAdress addressDetails={clientData.address} />
-
-              {/* People Associated with the Client */}
-              <Box my={4}>
-                <Typography variant="h6">People</Typography>
-                {clientData.people.map((person) => (
-                  <Typography key={person.email}>
-                    {person.title} {person.firstName} {person.lastName} -{" "}
-                    {person.email} ({person.phone})
-                  </Typography>
-                ))}
-              </Box>
+              <ClientContacts clientContacts={clientData.people} />
             </>
           )
         )}

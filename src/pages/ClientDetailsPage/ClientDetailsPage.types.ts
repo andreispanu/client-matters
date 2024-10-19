@@ -1,5 +1,4 @@
 export type Person = {
-  title: string;
   firstName: string;
   lastName: string;
   email: string;
