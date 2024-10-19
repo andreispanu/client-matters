@@ -6,7 +6,7 @@ import Navigation from "./components/navigation";
 import PageLayout from "./layout";
 import SearchPage from "./pages/SearchPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ClientDetails from "./pages/ClientDetails";
+import ClientDetails from "./pages/ClientDetailsPage";
 
 const queryClient = new QueryClient();
 

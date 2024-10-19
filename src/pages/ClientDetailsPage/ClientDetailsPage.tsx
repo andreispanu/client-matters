@@ -4,15 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Container, Typography, Alert, Box, Skeleton } from "@mui/material";
 import MatersDialog from "../../components/mattersDialog";
-import { ClientData, Matter } from "./ClientDetails.types";
+import { ClientData, Matter } from "./ClientDetailsPage.types";
 import MattersTable from "../../components/mattersTable";
 import {
   StyledClientDetailsPageHeading,
   StyledClientDetailsContainer,
-  StyledClientDetailsCopy,
-} from "./ClientDetails.styles";
+} from "./ClientDetailsPage.styles";
 import { formatCustomDate } from "../../utils";
 import ClientAdress from "../../components/clientAdress";
+import ClientDetails from "../../components/clientDetails";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -46,7 +46,7 @@ const fetchClientMatters = async (
   return data;
 };
 
-const ClientDetails = () => {
+const ClientDetailsPage = () => {
   const { clientId } = useParams<{ clientId: string }>(); // Ensure clientId is a string from the URL parameters
   const [selectedMatter, setSelectedMatter] = useState<Matter | null>(null); // Track the selected matter
   const [open, setOpen] = useState(false); // Track dialog open state
@@ -123,10 +123,16 @@ const ClientDetails = () => {
         ) : (
           clientData && (
             <>
-              <StyledClientDetailsCopy>
+              {/* <StyledClientDetailsCopy>
                 {clientData.name}
-              </StyledClientDetailsCopy>
-              <Typography>{clientData.description}</Typography>
+              </StyledClientDetailsCopy> */}
+              
+              {/* Client Description */}
+              <ClientDetails
+                clientName={clientData.name}
+                clientDescription={clientData.description}
+                clientInceptionDate={clientData.inceptionDate}
+              />
 
               {/* Client Address */}
               <ClientAdress addressDetails={clientData.address} />
@@ -192,4 +198,4 @@ const ClientDetails = () => {
   );
 };
 
-export default ClientDetails;
+export default ClientDetailsPage;

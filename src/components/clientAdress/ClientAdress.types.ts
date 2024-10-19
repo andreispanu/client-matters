@@ -1,4 +1,4 @@
-import { AddressDetails } from "../../pages/ClientDetails/ClientDetails.types";
+import { AddressDetails } from "../../pages/ClientDetailsPage/ClientDetailsPage.types";
 
 export type ClientAdressProps = {
   addressDetails: AddressDetails;

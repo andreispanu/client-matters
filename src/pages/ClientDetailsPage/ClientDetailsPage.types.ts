@@ -20,6 +20,7 @@ export type ClientData = {
   description: string;
   people: Person[];
   address: AddressDetails;
+  inceptionDate: string;
 };
 
 export type Matter = {
