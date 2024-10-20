@@ -23,7 +23,7 @@ const fetchClientData = async (clientId: string): Promise<ClientData> => {
   return data;
 };
 
-// Fetch matters associated with the client with pagination
+// Fetch matters associated with the client with pagination and sorting
 const fetchClientMatters = async (
   clientId: string,
   page: number,
@@ -60,6 +60,8 @@ const ClientDetailsPage = () => {
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [sortBy, setSortBy] = useState<string>("name"); // Default sort by name
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc"); // Default sort order
   const [tabIndex, setTabIndex] = useState(0); // Track selected tab
 
   // Fetch client data
@@ -73,14 +75,21 @@ const ClientDetailsPage = () => {
     enabled: !!clientId,
   });
 
-  // Fetch matters data with pagination
+  // Fetch matters data with pagination and sorting
   const {
     data: mattersData,
     isLoading: mattersLoading,
     error: mattersError,
   } = useQuery({
-    queryKey: ["matters", clientId, page, rowsPerPage],
-    queryFn: () => fetchClientMatters(clientId!, page, rowsPerPage),
+    queryKey: ["matters", clientId, page, rowsPerPage, sortBy, sortOrder],
+    queryFn: () =>
+      fetchClientMatters(
+        clientId!,
+        page,
+        rowsPerPage,
+        sortBy === "name" ? "NAME" : "DATE",
+        sortOrder === "asc" ? "ASCENDING" : "DESCENDING"
+      ),
     enabled: !!clientId,
   });
 
@@ -104,6 +113,12 @@ const ClientDetailsPage = () => {
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleSortChange = (column: string) => {
+    const isAsc = sortBy === column && sortOrder === "asc";
+    setSortBy(column);
+    setSortOrder(isAsc ? "desc" : "asc");
   };
 
   const handleOpenDialog = (matterId: string) => {
@@ -184,6 +199,7 @@ const ClientDetailsPage = () => {
               </Box>
             )}
 
+            {/* Tab Panel 2: Client Matters */}
             {tabIndex === 1 && (
               <Box mt={3} p={theme.spacing(2)}>
                 <MattersTable
@@ -194,20 +210,15 @@ const ClientDetailsPage = () => {
                   totalResults={mattersData?.totalResults || 0}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleRowsPerPageChange}
-                  onOpenDialog={(matterId) => handleOpenDialog(matterId)}
+                  onOpenDialog={handleOpenDialog}
+                  sortBy={sortBy}
+                  sortOrder={sortOrder}
+                  onSortChange={handleSortChange}
                 />
               </Box>
             )}
-            <Box
-              sx={{
-                alignItems: "flex-end",
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <BackButton linkDetails="/" label="Back to Search" />
-            </Box>
+
+            <BackButton linkDetails="/" label="Back to Search" />
           </Grid>
         </Grid>
       </Container>

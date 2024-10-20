@@ -10,6 +10,7 @@ import {
   TableContainer,
   Pagination,
   Box,
+  TableSortLabel,
 } from "@mui/material";
 import { MattersTableProps } from "./MattersTable.types";
 import { formatCustomDate } from "../../utils";
@@ -18,7 +19,6 @@ import {
   TableTitle,
   TableTitleResults,
 } from "./MattersTable.styles";
-import theme from "../../theme";
 
 const MattersTable = ({
   mattersLoading,
@@ -28,10 +28,17 @@ const MattersTable = ({
   totalResults,
   onPageChange,
   onOpenDialog,
+  sortBy,
+  sortOrder,
+  onSortChange, // Function to handle sort changes
 }: MattersTableProps) => {
   const totalPages = Math.ceil(totalResults / rowsPerPage);
   const displayedFrom = page * 10 + 1;
   const displayedTo = Math.min((page + 1) * 10, totalResults);
+
+  const handleSort = (column: string) => {
+    onSortChange(column);
+  };
 
   return (
     <>
@@ -46,8 +53,24 @@ const MattersTable = ({
           <TableHead>
             <TableRow>
               <TableCell>Matter Code</TableCell>
-              <TableCell>Matter Name</TableCell>
-              <TableCell align="right">Inception Date</TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortBy === "name"}
+                  direction={sortBy === "name" ? sortOrder : "asc"}
+                  onClick={() => handleSort("name")}
+                >
+                  Matter Name
+                </TableSortLabel>
+              </TableCell>
+              <TableCell align="right">
+                <TableSortLabel
+                  active={sortBy === "date"}
+                  direction={sortBy === "date" ? sortOrder : "asc"}
+                  onClick={() => handleSort("date")}
+                >
+                  Inception Date
+                </TableSortLabel>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

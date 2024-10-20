@@ -14,4 +14,7 @@ export type MattersTableProps = {
   onPageChange: (event: unknown, newPage: number) => void;
   onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onOpenDialog: (matterId: string) => void;
+  sortBy: string; // New prop to indicate which column is sorted
+  sortOrder: "asc" | "desc"; // New prop to indicate sorting order
+  onSortChange: (column: string) => void; // New function to handle sort changes
 };
