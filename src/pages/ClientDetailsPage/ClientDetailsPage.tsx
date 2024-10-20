@@ -27,9 +27,9 @@ const fetchClientData = async (clientId: string): Promise<ClientData> => {
 const fetchClientMatters = async (
   clientId: string,
   page: number,
-  rowsPerPage: number,
   sortBy: string = "DATE",
-  sortOrder: string = "ASCENDING"
+  sortOrder: string = "ASCENDING",
+  rowsPerPage: number = 10 // Fixed rowsPerPage
 ): Promise<{ results: Matter[]; totalResults: number }> => {
   const index = page * rowsPerPage;
   const offset = rowsPerPage;
@@ -59,12 +59,12 @@ const ClientDetailsPage = () => {
   const [selectedMatter, setSelectedMatter] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [sortBy, setSortBy] = useState<string>("name"); // Default sort by name
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc"); // Default sort order
   const [tabIndex, setTabIndex] = useState(0); // Track selected tab
 
-  // Fetch client data
+  const rowsPerPage = 10; // Fixed rows per page
+
   const {
     data: clientData,
     isLoading: clientLoading,
@@ -75,25 +75,23 @@ const ClientDetailsPage = () => {
     enabled: !!clientId,
   });
 
-  // Fetch matters data with pagination and sorting
   const {
     data: mattersData,
     isLoading: mattersLoading,
     error: mattersError,
   } = useQuery({
-    queryKey: ["matters", clientId, page, rowsPerPage, sortBy, sortOrder],
+    queryKey: ["matters", clientId, page, sortBy, sortOrder],
     queryFn: () =>
       fetchClientMatters(
         clientId!,
         page,
-        rowsPerPage,
         sortBy === "name" ? "NAME" : "DATE",
-        sortOrder === "asc" ? "ASCENDING" : "DESCENDING"
+        sortOrder === "asc" ? "ASCENDING" : "DESCENDING",
+        rowsPerPage
       ),
     enabled: !!clientId,
   });
 
-  // Fetch matter details
   const {
     data: matterDetails,
     isLoading: matterDetailsLoading,
@@ -106,13 +104,6 @@ const ClientDetailsPage = () => {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const handleRowsPerPageChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   const handleSortChange = (column: string) => {
@@ -152,7 +143,6 @@ const ClientDetailsPage = () => {
               <StyledTab label="Client Matters" />
             </StyledTabPanel>
 
-            {/* Tab Panel 1: Client Details */}
             {tabIndex === 0 && (
               <Box mt={3}>
                 {clientLoading ? (
@@ -199,17 +189,14 @@ const ClientDetailsPage = () => {
               </Box>
             )}
 
-            {/* Tab Panel 2: Client Matters */}
             {tabIndex === 1 && (
               <Box mt={3} p={theme.spacing(2)}>
                 <MattersTable
                   mattersLoading={mattersLoading}
                   mattersData={mattersData || { results: [], totalResults: 0 }}
                   page={page}
-                  rowsPerPage={rowsPerPage}
                   totalResults={mattersData?.totalResults || 0}
                   onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleRowsPerPageChange}
                   onOpenDialog={handleOpenDialog}
                   sortBy={sortBy}
                   sortOrder={sortOrder}
