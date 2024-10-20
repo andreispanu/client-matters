@@ -13,7 +13,6 @@ import { StyledTab, StyledTabPanel } from "./ClientDetailsPage.styles";
 import theme from "../../theme";
 import BackButton from "../../components/backButton";
 
-// Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
   const { data } = await axios.get(`/clientdata/client/${clientId}`, {
     headers: {
@@ -23,13 +22,12 @@ const fetchClientData = async (clientId: string): Promise<ClientData> => {
   return data;
 };
 
-// Fetch matters associated with the client with pagination and sorting
 const fetchClientMatters = async (
   clientId: string,
   page: number,
   sortBy: string = "DATE",
   sortOrder: string = "ASCENDING",
-  rowsPerPage: number = 10 // Fixed rowsPerPage
+  rowsPerPage: number = 10
 ): Promise<{ results: Matter[]; totalResults: number }> => {
   const index = page * rowsPerPage;
   const offset = rowsPerPage;
@@ -55,15 +53,15 @@ const fetchMatterDetails = async (matterId: string): Promise<MattersData> => {
 };
 
 const ClientDetailsPage = () => {
-  const { clientId } = useParams<{ clientId: string }>(); // Ensure clientId is a string from the URL parameters
+  const { clientId } = useParams<{ clientId: string }>();
   const [selectedMatter, setSelectedMatter] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
-  const [sortBy, setSortBy] = useState<string>("name"); // Default sort by name
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc"); // Default sort order
-  const [tabIndex, setTabIndex] = useState(0); // Track selected tab
+  const [sortBy, setSortBy] = useState<string>("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const rowsPerPage = 10; // Fixed rows per page
+  const rowsPerPage = 10;
 
   const {
     data: clientData,
@@ -210,7 +208,6 @@ const ClientDetailsPage = () => {
         </Grid>
       </Container>
 
-      {/* Dialog for matter details */}
       <MatersDialog
         open={open}
         onClose={handleCloseDialog}

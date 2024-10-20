@@ -25,10 +25,11 @@ const SearchBar = ({
 
   return (
     <>
-      <SearchBarContainer>
+      <SearchBarContainer data-testid="search-bar-container">
         <Grid container spacing={2} mt={theme.spacing(4)}>
           <Grid size={{ xs: 12, sm: 9 }}>
             <SearchBarInput
+              data-testid="search-bar-input"
               label="Search clients by name"
               variant="outlined"
               value={searchTerm}
@@ -39,7 +40,7 @@ const SearchBar = ({
                 endAdornment: (
                   <InputAdornment position="end">
                     {searchTerm ? (
-                      <IconButton onClick={onClearSearch}>
+                      <IconButton onClick={onClearSearch} data-testid="clear">
                         <Clear />
                       </IconButton>
                     ) : (
@@ -55,6 +56,7 @@ const SearchBar = ({
               variant="contained"
               color="primary"
               onClick={onSearch}
+              data-testid="search-bar-button"
             >
               Search
             </SearchBarButton>

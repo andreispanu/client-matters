@@ -12,7 +12,11 @@ import {
 } from "@mui/material";
 import { ReusableTableProps } from "./SearchTable.types";
 import { formatCustomDate } from "../../utils";
-import { TableTitleContainer, TableTitle, TableTitleResults } from "./SearchTable.styles";
+import {
+  TableTitleContainer,
+  TableTitle,
+  TableTitleResults,
+} from "./SearchTable.styles";
 
 const SearchTable = ({
   data,

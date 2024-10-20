@@ -8,8 +8,9 @@ describe('<App />', () => {
     mount(<App />)
   })
 
-  it('renders learn react link', () => {
+  it('navigates to search page', () => {
     mount(<App />)
-    cy.contains('Learn React').should('be.visible')
+    cy.get('a[href="/"]').click()
+    cy.url().should('include', '/')
   })
 })

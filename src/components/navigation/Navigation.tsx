@@ -6,6 +6,7 @@ import {
   StyledNavigationContent,
 } from "./Navigation.syles";
 import {
+  Box,
   Drawer,
   IconButton,
   Link,
@@ -15,6 +16,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import BackButton from "../backButton";
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -49,17 +51,38 @@ const Navigation = () => {
           </IconButton>
         </StyledNavigationContent>
       </StyledNavigationContainer>
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <List>
-          <ListItem>
-            <StyedLogoContainer>
-              <StyledLink to="/">Taylor Wessing</StyledLink>
-            </StyedLogoContainer>
-          </ListItem>
-          <ListItemButton component={Link} href="/">
-            <ListItemText primary="Search Clients" />
-          </ListItemButton>
-        </List>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        data-testid="drawer"
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "column",
+            height: "100vh",
+          }}
+        >
+          <List data-testid="side-navigation">
+            <ListItem>
+              <StyedLogoContainer>
+                <StyledLink to="/">Taylor Wessing</StyledLink>
+              </StyedLogoContainer>
+            </ListItem>
+            <ListItemButton component={Link} href="/">
+              <ListItemText primary="Search Clients" />
+            </ListItemButton>
+          </List>
+          <Box m={2}>
+            <BackButton
+              label="Close"
+              linkDetails="#"
+              action={toggleDrawer(false)}
+            />
+          </Box>
+        </Box>
       </Drawer>
     </>
   );
