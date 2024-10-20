@@ -40,7 +40,7 @@ const ClientContacts = ({ clientContacts }: ClientContactsProps) => {
 
   return (
     <div>
-      <ClientContactsTitle>People</ClientContactsTitle>
+      <ClientContactsTitle>Contacts</ClientContactsTitle>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="sortable table">
           <TableHead>

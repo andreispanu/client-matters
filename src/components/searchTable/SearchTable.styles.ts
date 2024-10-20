@@ -12,7 +12,14 @@ export const TableTitleContainer = styled("div")(() => ({
 
 export const TableTitle = styled(Typography)(() => ({
     margin: 0,
-    fontSize: theme.typography.body2.fontSize,
+    fontSize: theme.typography.body1.fontSize,
     color: theme.palette.text.primary,
+    fontWeight: theme.typography.fontWeightMedium,
+}))
+
+export const TableTitleResults = styled(Typography)(() => ({
+    margin: 0,
+    fontSize: theme.typography.body2.fontSize,
+    color: theme.palette.text.secondary,
     fontWeight: theme.typography.fontWeightMedium,
 }))

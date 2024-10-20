@@ -1,23 +1,20 @@
 import React from "react";
-import {
-  ClientAdressContainer,
-  ClientAdressTitle,
-  ClientAdressLine,
-} from "./ClientAdress.styles";
 import { ClientAdressProps } from "./ClientAdress.types";
+import { Typography } from "@mui/material";
+import { ClientDescriptionTitle } from "./ClientAdress.styles";
 
 const ClientAdress = (props: ClientAdressProps) => {
   const { addressDetails } = props;
 
   return (
-    <ClientAdressContainer>
-      <ClientAdressTitle>Address</ClientAdressTitle>
-      <ClientAdressLine>{addressDetails.addressLine1}</ClientAdressLine>
-      <ClientAdressLine>{addressDetails.addressLine2}</ClientAdressLine>
-      <ClientAdressLine>{addressDetails.city}</ClientAdressLine>
-      <ClientAdressLine>{addressDetails.county}</ClientAdressLine>
-      <ClientAdressLine>{addressDetails.postcode}</ClientAdressLine>
-    </ClientAdressContainer>
+    <>
+      <ClientDescriptionTitle>Address:</ClientDescriptionTitle>
+      <Typography variant="body2">{addressDetails.addressLine1}</Typography>
+      <Typography variant="body2">{addressDetails.addressLine2}</Typography>
+      <Typography variant="body2">{addressDetails.addressLine2}</Typography>
+      <Typography variant="body2">{addressDetails.county}</Typography>
+      <Typography variant="body2">{addressDetails.postcode}</Typography>
+    </>
   );
 };
 

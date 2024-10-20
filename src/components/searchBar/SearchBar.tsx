@@ -1,7 +1,14 @@
 import { InputAdornment, IconButton } from "@mui/material";
 import { Search, Clear } from "@mui/icons-material";
 import { SearchBarProps } from "./SearchBar.types";
-import { SearchBarContainer, SearchBarButton, SearchBarInput, SearchErrorMessage } from "./SearchBar.styles";
+import {
+  SearchBarContainer,
+  SearchBarButton,
+  SearchBarInput,
+  SearchErrorMessage,
+} from "./SearchBar.styles";
+import Grid from "@mui/material/Grid2";
+import theme from "../../theme";
 
 const SearchBar = ({
   searchTerm,
@@ -10,7 +17,6 @@ const SearchBar = ({
   onClearSearch,
   onErrorMessage,
 }: SearchBarProps) => {
-  
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       onSearch();
@@ -20,33 +26,42 @@ const SearchBar = ({
   return (
     <>
       <SearchBarContainer>
-        <SearchBarInput
-          label="Search clients by name"
-          variant="outlined"
-          value={searchTerm}
-          onChange={onSearchChange}
-          onKeyDown={handleKeyDown}
-          fullWidth
-          InputProps={{
-            endAdornment: searchTerm && (
-              <InputAdornment position="end">
-                <IconButton onClick={onClearSearch}>
-                  <Clear />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        <SearchBarButton
-          variant="contained"
-          color="primary"
-          onClick={onSearch}
-          startIcon={<Search />}
-        >
-          Search
-        </SearchBarButton>
+        <Grid container spacing={2} mt={theme.spacing(4)}>
+          <Grid size={{ xs: 12, sm: 9 }}>
+            <SearchBarInput
+              label="Search clients by name"
+              variant="outlined"
+              value={searchTerm}
+              onChange={onSearchChange}
+              onKeyDown={handleKeyDown}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {searchTerm ? (
+                      <IconButton onClick={onClearSearch}>
+                        <Clear />
+                      </IconButton>
+                    ) : (
+                      <Search />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 3, lg: 2 }}>
+            <SearchBarButton
+              variant="contained"
+              color="primary"
+              onClick={onSearch}
+            >
+              Search
+            </SearchBarButton>
+          </Grid>
+        </Grid>
       </SearchBarContainer>
-      <SearchErrorMessage>{onErrorMessage ?? ''}</SearchErrorMessage>
+      <SearchErrorMessage>{onErrorMessage ?? ""}</SearchErrorMessage>
     </>
   );
 };

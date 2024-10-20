@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Snackbar, Alert } from "@mui/material";
+import { Container, Snackbar, Alert, Skeleton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -107,7 +107,7 @@ const SearchPage = () => {
       return {
         ...client,
         name: clientDetail?.name || client.name,
-        description: clientDetail?.description || "No description available",
+        description: clientDetail?.description || <Skeleton type="text" />,
         code: clientDetail?.code || "No code available",
       };
     }) || [];
@@ -205,7 +205,7 @@ const SearchPage = () => {
 
       {combinedResults && combinedResults.length !== 0 && isSearchTriggered && (
         <SearchTable
-          data={combinedResults} // Use combined client and matter data
+          data={combinedResults} 
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSortByName={handleSortByName}

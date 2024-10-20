@@ -37,7 +37,7 @@ const Navigation = () => {
       <StyledNavigationContainer data-testid="navigation-container">
         <StyledNavigationContent>
           <StyedLogoContainer>
-            <StyledLink to="/">Client Matters</StyledLink>
+            <StyledLink to="/">Taylor Wessing</StyledLink>
           </StyedLogoContainer>
           <IconButton
             edge="start"
@@ -53,7 +53,7 @@ const Navigation = () => {
         <List>
           <ListItem>
             <StyedLogoContainer>
-              <StyledLink to="/">Client Matters</StyledLink>
+              <StyledLink to="/">Taylor Wessing</StyledLink>
             </StyedLogoContainer>
           </ListItem>
           <ListItemButton component={Link} href="/">

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { ReusableTableProps } from "./SearchTable.types";
 import { formatCustomDate } from "../../utils";
-import { TableTitleContainer, TableTitle } from "./SearchTable.styles";
+import { TableTitleContainer, TableTitle, TableTitleResults } from "./SearchTable.styles";
 
 const SearchTable = ({
   data,
@@ -33,10 +33,10 @@ const SearchTable = ({
   return (
     <>
       <TableTitleContainer>
-        <TableTitle>Search results</TableTitle>
-        <TableTitle>
+        <TableTitle>Client Search results</TableTitle>
+        <TableTitleResults>
           Displaying {displayedFrom} - {displayedTo} of {totalResults} results
-        </TableTitle>
+        </TableTitleResults>
       </TableTitleContainer>
       <TableContainer component={Paper}>
         <Table>
@@ -68,49 +68,35 @@ const SearchTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
-              ? Array.from({ length: 10 }).map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              : data.map((client) => (
-                  <TableRow
-                    key={client.clientId}
-                    onClick={() => onRowClick(client.clientId)}
-                    hover
-                    style={{ cursor: "pointer" }}
-                  >
-                    <TableCell>{client.name}</TableCell>
-                    <TableCell>{client.description}</TableCell>
-                    <TableCell>{client.code}</TableCell>
-                    <TableCell align="right">
-                      {formatCustomDate(client.inception)}
-                    </TableCell>
-                  </TableRow>
-                ))}
+            {isLoading ? (
+              <Skeleton variant="text" />
+            ) : (
+              data.map((client) => (
+                <TableRow
+                  key={client.clientId}
+                  onClick={() => onRowClick(client.clientId)}
+                  hover
+                  style={{ cursor: "pointer" }}
+                >
+                  <TableCell>{client.name}</TableCell>
+                  <TableCell>{client.description}</TableCell>
+                  <TableCell>{client.code}</TableCell>
+                  <TableCell align="right">
+                    {formatCustomDate(client.inception)}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* MUI Pagination Component */}
       <Pagination
-        count={totalPages} // Total number of pages
-        page={page + 1} // Pagination uses 1-based index, adjust for 0-based page state
-        onChange={(event, value) => onPageChange(event, value - 1)} // Adjust back to 0-based index
+        count={totalPages}
+        page={page + 1}
+        onChange={(event, value) => onPageChange(event, value - 1)}
         color="primary"
-        sx={{ mt: 2, display: "flex", justifyContent: "center", pb: 4 }} // Add spacing and centering
+        sx={{ mt: 2, display: "flex", justifyContent: "center", pb: 4 }}
       />
     </>
   );

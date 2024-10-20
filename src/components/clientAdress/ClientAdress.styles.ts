@@ -8,11 +8,10 @@ export const ClientAdressContainer = styled(Box)(() => ({
   marginTop: theme.spacing(2),
 }));
 
-export const ClientAdressTitle = styled(Typography)(() => ({
+export const ClientDescriptionTitle = styled(Typography)(() => ({
   color: customColors.darkblue,
-  fontSize: theme.typography.h6.fontSize,
-  fontWeight: theme.typography.fontWeightBold,
-  marginBottom: theme.spacing(1),
+  fontSize: theme.typography.body1.fontSize,
+  fontWeight: theme.typography.fontWeightMedium,
 }));
 
 export const ClientAdressLine = styled(Typography)(() => ({

@@ -16,6 +16,7 @@ import ClientAdress from "../../components/clientAdress";
 import ClientDetails from "../../components/clientDetails";
 import ClientContacts from "../../components/clientContacts";
 import { StyledTab, StyledTabPanel } from "./ClientDetailsPage.styles";
+import theme from "../../theme";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -139,8 +140,8 @@ const ClientDetailsPage = () => {
               onChange={handleTabChange}
               aria-label="Client details and matters tabs"
             >
-              <StyledTab label="Details" />
-              <StyledTab label="Matters" />
+              <StyledTab label="Client Details" />
+              <StyledTab label="Client Matters" />
             </StyledTabPanel>
 
             {/* Tab Panel 1: Client Details */}
@@ -172,18 +173,16 @@ const ClientDetailsPage = () => {
                   </Grid>
                 ) : (
                   clientData && (
-                    <Grid container spacing={2}>
-                      <Grid size={{xs: 12, md:6}}>
+                    <Grid container spacing={2} >
+                      <Grid size={{xs: 12}}>
                         <ClientDetails
                           clientName={clientData.name}
                           clientDescription={clientData.description}
                           clientInceptionDate={clientData.inceptionDate}
+                          address={clientData.address}
                         />
                       </Grid>
-                      <Grid size={{xs: 12, md:6}}>
-                        <ClientAdress addressDetails={clientData.address} />
-                      </Grid>
-                      <Grid size={12}>
+                      <Grid size={12} p={theme.spacing(2)}>
                         <ClientContacts clientContacts={clientData.people} />
                       </Grid>
                     </Grid>
@@ -192,9 +191,8 @@ const ClientDetailsPage = () => {
               </Box>
             )}
 
-            {/* Tab Panel 2: Client Matters */}
             {tabIndex === 1 && (
-              <Box mt={3}>
+              <Box mt={3} p={theme.spacing(2)}>
                 <MattersTable
                   mattersLoading={mattersLoading}
                   mattersData={mattersData || { results: [], totalResults: 0 }}
