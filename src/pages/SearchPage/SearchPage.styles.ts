@@ -17,7 +17,7 @@ export const MainSearchTextCopy = styled(Typography)(() => ({
 }))
 
 export const MainHeading = styled(Typography)(() => ({
-  fontSize: '1.8rem',
+  fontSize: theme.typography.h6.fontSize,
   fontWeight: theme.typography.fontWeightMedium,
   borderLeft: `4px solid ${customColors.brightGreen}`, 
   paddingLeft: theme.spacing(1),

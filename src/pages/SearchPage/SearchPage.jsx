@@ -205,7 +205,7 @@ const SearchPage = () => {
 
       {combinedResults && combinedResults.length !== 0 && isSearchTriggered && (
         <SearchTable
-          data={combinedResults} 
+          data={combinedResults}
           sortBy={sortBy}
           sortOrder={sortOrder}
           onSortByName={handleSortByName}

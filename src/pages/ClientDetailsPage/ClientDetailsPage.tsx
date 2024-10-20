@@ -2,21 +2,16 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  Container,
-  Alert,
-  Box,
-  Skeleton,
-} from "@mui/material";
+import { Container, Alert, Box, Skeleton } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import MatersDialog from "../../components/mattersDialog";
 import { ClientData, Matter, MattersData } from "./ClientDetailsPage.types";
 import MattersTable from "../../components/mattersTable";
-import ClientAdress from "../../components/clientAdress";
 import ClientDetails from "../../components/clientDetails";
 import ClientContacts from "../../components/clientContacts";
 import { StyledTab, StyledTabPanel } from "./ClientDetailsPage.styles";
 import theme from "../../theme";
+import BackButton from "../../components/backButton";
 
 // Fetch client data by clientId
 const fetchClientData = async (clientId: string): Promise<ClientData> => {
@@ -57,11 +52,11 @@ const fetchMatterDetails = async (matterId: string): Promise<MattersData> => {
     },
   });
   return data;
-}
+};
 
 const ClientDetailsPage = () => {
   const { clientId } = useParams<{ clientId: string }>(); // Ensure clientId is a string from the URL parameters
-  const [selectedMatter, setSelectedMatter] = useState<string>('');
+  const [selectedMatter, setSelectedMatter] = useState<string>("");
   const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -118,14 +113,12 @@ const ClientDetailsPage = () => {
 
   const handleCloseDialog = () => {
     setOpen(false);
-    setSelectedMatter('');
+    setSelectedMatter("");
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   };
-
-  console.log("MattersData", mattersData);
 
   if (clientError || mattersError)
     return <Alert severity="error">Error fetching data</Alert>;
@@ -133,7 +126,7 @@ const ClientDetailsPage = () => {
   return (
     <>
       <Container>
-        <Grid container spacing={4}>
+        <Grid container spacing={4} mt={theme.spacing(2)}>
           <Grid size={12}>
             <StyledTabPanel
               value={tabIndex}
@@ -149,21 +142,21 @@ const ClientDetailsPage = () => {
               <Box mt={3}>
                 {clientLoading ? (
                   <Grid container spacing={2}>
-                    <Grid size={{xs: 12, md:6}}>
+                    <Grid size={{ xs: 12, md: 6 }}>
                       <Skeleton
                         variant="rectangular"
                         width="100%"
                         height={200}
                       />
                     </Grid>
-                    <Grid size={{xs: 12, md:6}}>
+                    <Grid size={{ xs: 12, md: 6 }}>
                       <Skeleton
                         variant="rectangular"
                         width="100%"
                         height={200}
                       />
                     </Grid>
-                    <Grid size={{xs: 12}}>
+                    <Grid size={{ xs: 12 }}>
                       <Skeleton
                         variant="rectangular"
                         width="100%"
@@ -173,8 +166,8 @@ const ClientDetailsPage = () => {
                   </Grid>
                 ) : (
                   clientData && (
-                    <Grid container spacing={2} >
-                      <Grid size={{xs: 12}}>
+                    <Grid container spacing={2}>
+                      <Grid size={{ xs: 12 }}>
                         <ClientDetails
                           clientName={clientData.name}
                           clientDescription={clientData.description}
@@ -201,10 +194,20 @@ const ClientDetailsPage = () => {
                   totalResults={mattersData?.totalResults || 0}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleRowsPerPageChange}
-                  onOpenDialog={(matterId)=>handleOpenDialog(matterId)}
+                  onOpenDialog={(matterId) => handleOpenDialog(matterId)}
                 />
               </Box>
             )}
+            <Box
+              sx={{
+                alignItems: "flex-end",
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <BackButton linkDetails="/" label="Back to Search" />
+            </Box>
           </Grid>
         </Grid>
       </Container>
@@ -214,16 +217,20 @@ const ClientDetailsPage = () => {
         open={open}
         onClose={handleCloseDialog}
         title="Matter Details"
-        content={matterDetails ?? {
-          clientId: "",
-          matterId: selectedMatter,
-          matterCode: "",
-          matterName: "",
-          matterDescription: "",
-          matterDate: "",
-        }}
+        content={
+          matterDetails ?? {
+            clientId: "",
+            matterId: selectedMatter,
+            matterCode: "",
+            matterName: "",
+            matterDescription: "",
+            matterDate: "",
+          }
+        }
         contentLoading={matterDetailsLoading}
-        contentError={matterDetailsError ? matterDetailsError.message : undefined}
+        contentError={
+          matterDetailsError ? matterDetailsError.message : undefined
+        }
       />
     </>
   );
