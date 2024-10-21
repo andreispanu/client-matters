@@ -122,10 +122,6 @@ const SearchPage = () => {
     setPage(newPage);
   };
 
-  const handleRowsPerPageChange = (event) => {
-    setPage(0);
-  };
-
   const handleSortByDate = () => {
     const isAsc = sortBy === "DATE" && sortOrder === "asc";
     setSortOrder(isAsc ? "desc" : "asc");
@@ -193,7 +189,6 @@ const SearchPage = () => {
           displayedFrom={displayedFrom}
           displayedTo={displayedTo}
           onPageChange={handleChangePage}
-          onRowsPerPageChange={handleRowsPerPageChange}
           onRowClick={handleRowClick}
           isLoading={clientsLoading}
         />

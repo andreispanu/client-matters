@@ -1,5 +1,5 @@
 import { Button, Tab, Tabs, Typography } from "@mui/material";
-import { borderRadius, height, styled } from "@mui/system";
+import { styled } from "@mui/system";
 import theme, { customColors } from "../../theme";
 
 export const PageDescriptionTitle = styled(Typography)(() => ({
@@ -21,19 +21,19 @@ export const StyledClientDetailsCopy = styled(Typography)(() => ({
 
 export const StyledTabPanel = styled(Tabs)(() => ({
   borderBottom: `2px solid ${customColors.brightGreen}`,
-  '& .MuiTabs-indicator': {
+  "& .MuiTabs-indicator": {
     backgroundColor: customColors.brightGreen,
     height: "3px",
-  }
-}))
+  },
+}));
 
 export const StyledTab = styled(Tab)(() => ({
-  '&.Mui-selected': {
+  "&.Mui-selected": {
     borderColor: customColors.brightGreen,
     fontWeight: theme.typography.fontWeightMedium,
     fontSize: theme.typography.body1.fontSize,
-  }
-}))
+  },
+}));
 
 export const StyledClientDetailsButton = styled(Button)(() => ({
   padding: theme.spacing(1, 4),

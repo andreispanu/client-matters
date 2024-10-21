@@ -1,3 +1,4 @@
+import React from "react";
 import { InputAdornment, IconButton } from "@mui/material";
 import { Search, Clear } from "@mui/icons-material";
 import { SearchBarProps } from "./SearchBar.types";

@@ -16,7 +16,6 @@ export type ReusableTableProps = {
   page: number;
   totalResults: number;
   onPageChange: (event: unknown, newPage: number) => void;
-  onRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onRowClick: (clientId: string) => void;
   isLoading?: boolean;
   displayedFrom: number;

@@ -1,3 +1,4 @@
+import React from "react";
 import SearchBar from "./SearchBar";
 import { mount } from "@cypress/react18";
 

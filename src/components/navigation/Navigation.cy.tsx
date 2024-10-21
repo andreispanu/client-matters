@@ -1,3 +1,4 @@
+import React from "react";
 import Navigation from "./Navigation";
 import { mount } from "@cypress/react18";
 import { BrowserRouter } from "react-router-dom";

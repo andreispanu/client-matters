@@ -138,7 +138,7 @@ const ClientDetailsPage = () => {
               aria-label="Client details and matters tabs"
             >
               <StyledTab label="Client Details" />
-              <StyledTab label="Client Matters" />
+              <StyledTab label="Matters" />
             </StyledTabPanel>
 
             {tabIndex === 0 && (
@@ -211,7 +211,6 @@ const ClientDetailsPage = () => {
       <MatersDialog
         open={open}
         onClose={handleCloseDialog}
-        title="Matter Details"
         content={
           matterDetails ?? {
             clientId: "",

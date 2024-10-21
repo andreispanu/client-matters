@@ -14,7 +14,6 @@ import { formatCustomDateTime } from "../../utils";
 export const MatersDialog = ({
   open,
   onClose,
-  title,
   content,
   actions,
   contentError,
@@ -37,21 +36,21 @@ export const MatersDialog = ({
         ) : (
           <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
-              <Typography variant="body1" fontWeight={'500'}>Matter Name</Typography>
+              <Typography variant="body1" fontWeight={'500'}>Matter Name:</Typography>
               <Typography variant="body2">{matterName}</Typography>
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Typography variant="body1" fontWeight={'500'}>Matter Code</Typography>
+              <Typography variant="body1" fontWeight={'500'}>Matter Code:</Typography>
               <Typography variant="body2">{matterCode}</Typography>
             </Grid>
             <Grid size={{ xs: 12}}>
-              <Typography variant="body1" fontWeight={'500'}>Inception Date</Typography>
+              <Typography variant="body1" fontWeight={'500'}>Inception Date:</Typography>
               <Typography variant="body2">
                 {formatCustomDateTime(matterDate)}
               </Typography>
             </Grid>
             <Grid size={{ xs: 12 }}>
-              <Typography variant="body1" fontWeight={'500'}>Matter Description</Typography>
+              <Typography variant="body1" fontWeight={'500'}>Matter Description:</Typography>
               <Typography variant="body2">{matterDescription}</Typography>
             </Grid>
           </Grid>

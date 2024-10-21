@@ -3,7 +3,6 @@ import { MattersData } from "../../pages/ClientDetailsPage/ClientDetailsPage.typ
 export type MatersDialogProps = {
   open: boolean;
   onClose: () => void;
-  title?: string;
   content: MattersData;
   actions?: React.ReactNode;
   contentLoading?: boolean;
