@@ -1,23 +1,21 @@
 {
-  "extends": ["react-app", "airbnb"],
-  "rules": {
-    "indent": ["error", "tab"],
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"]
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "useJSXTextNode": true,
+    "warnOnUnsupportedTypeScriptVersion": false
   },
+  "root": true,
   "env": {
-    "node": true,
-    "commonjs": true,
     "browser": true,
-    "es6": true
+    "es6": true,
+    "node": true,
+    "commonjs": true
   },
-  "globals": {
-    "process": true
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  }
+  "extends": ["eslint:recommended"]
 }
