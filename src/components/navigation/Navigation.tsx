@@ -74,6 +74,12 @@ const Navigation = () => {
             <ListItemButton component={Link} href="/">
               <ListItemText primary="Search Clients" />
             </ListItemButton>
+            <ListItemButton component={Link} href="/search-dropdown">
+              <ListItemText primary="Search Dropdown" />
+            </ListItemButton>
+            <ListItemButton component={Link} href="/client-pdf">
+              <ListItemText primary="PDF Example" />
+            </ListItemButton>
           </List>
           <Box m={2}>
             <BackButton
