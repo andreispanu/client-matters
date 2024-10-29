@@ -9,15 +9,15 @@ export type Client = {
 
 export type ReusableTableProps = {
   data: Client[];
-  sortBy: string;
-  sortOrder: "asc" | "desc";
-  onSortByName: () => void;
-  onSortByDate: () => void;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  onSortByName?: () => void;
+  onSortByDate?: () => void;
   page: number;
   totalResults: number;
   onPageChange: (event: unknown, newPage: number) => void;
   onRowClick: (clientId: string) => void;
   isLoading?: boolean;
-  displayedFrom: number;
-  displayedTo: number;
+  displayedFrom?: number;
+  displayedTo?: number;
 };

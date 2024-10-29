@@ -4,4 +4,6 @@ export type SearchBarProps = {
   onSearch: () => void;
   onClearSearch: () => void;
   onErrorMessage?: string;
+  suggestions?: string[];
+  loading?: boolean;
 };

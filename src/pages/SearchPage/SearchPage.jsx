@@ -74,6 +74,7 @@ const SearchPage = () => {
       refetchClients();
     }
   }, [fetchedTerm, page, sortBy, sortOrder, refetchClients]);
+  console.log(clientsData);
 
   useEffect(() => {
     if (clientsData?.results?.length > 0) {
@@ -159,6 +160,8 @@ const SearchPage = () => {
   const totalResults = clientsData?.totalResults || 0;
   const displayedFrom = page * 10 + 1;
   const displayedTo = Math.min((page + 1) * 10, totalResults);
+
+
 
   return (
     <Container>
